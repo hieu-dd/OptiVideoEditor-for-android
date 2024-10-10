@@ -7,14 +7,15 @@
 
 package com.obs.marveleditor.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiPositionListener
 
@@ -35,7 +36,7 @@ class OptiPositionAdapter(positionList: ArrayList<String>, val context: Context,
         return myPositionList.size
     }
 
-    override fun onBindViewHolder(holder: MyPostViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyPostViewHolder, @SuppressLint("RecyclerView") position: Int) {
 
         holder.tvSpeed.text = myPositionList[position]
 

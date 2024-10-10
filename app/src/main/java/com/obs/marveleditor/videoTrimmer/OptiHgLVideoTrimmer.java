@@ -13,8 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -42,6 +40,9 @@ import com.obs.marveleditor.videoTrimmer.view.OptiThumb;
 import com.obs.marveleditor.videoTrimmer.view.OptiTimeLineView;
 
 import static com.obs.marveleditor.videoTrimmer.utils.OptiTrimVideoUtils.stringForTime;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 public class OptiHgLVideoTrimmer extends FrameLayout {
 

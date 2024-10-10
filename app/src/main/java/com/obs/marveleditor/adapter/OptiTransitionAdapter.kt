@@ -7,14 +7,15 @@
 
 package com.obs.marveleditor.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiFilterListener
 
@@ -31,7 +32,7 @@ class OptiTransitionAdapter (transitionList: ArrayList<String>, val context: Con
         return MyPostViewHolder(LayoutInflater.from(context).inflate(R.layout.opti_playback_view, p0, false))
     }
 
-    override fun onBindViewHolder(holder: MyPostViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyPostViewHolder, @SuppressLint("RecyclerView") position: Int) {
         holder.tvSpeed.text = myTransitionList[position]
 
         if (selectedPosition == position) {

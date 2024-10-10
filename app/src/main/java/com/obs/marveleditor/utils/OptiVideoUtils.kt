@@ -8,12 +8,14 @@
 package com.obs.marveleditor.utils
 
 import android.net.Uri
-import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DataSpec
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.FileDataSource
+
 import java.util.concurrent.TimeUnit
 
 object VideoUtils {
@@ -28,14 +30,11 @@ object VideoUtils {
         )
     }
 
+
     fun buildMediaSource(uri: Uri, fromWho: String, userAgent: String = ""): MediaSource? {
-
         when (fromWho) {
-
             VideoFrom.LOCAL -> {
-
                 val dataSpec = DataSpec(uri)
-
                 val fileDataSource = FileDataSource()
                 try {
                     fileDataSource.open(dataSpec)
@@ -47,20 +46,17 @@ object VideoUtils {
                         return fileDataSource
                     }
                 }
-
-                return ExtractorMediaSource.Factory(factory).createMediaSource(fileDataSource.uri)
+                return ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(fileDataSource.uri!!))
             }
 
             VideoFrom.REMOTE -> {
-                return ExtractorMediaSource.Factory(
-                    DefaultHttpDataSourceFactory(userAgent)
-                ).createMediaSource(uri)
+                val dataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(userAgent)
+                return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri))
             }
 
             else -> {
                 return null
             }
-
         }
     }
 }

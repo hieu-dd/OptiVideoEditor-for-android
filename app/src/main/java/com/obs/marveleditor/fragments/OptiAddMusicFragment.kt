@@ -17,15 +17,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v7.widget.AppCompatButton
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
@@ -115,18 +115,18 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
             checkPermission(OptiConstant.AUDIO_GALLERY, Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
-        sbrvVideoTrim?.setOnSeekBarRangedChangeListener(object : SeekBarRangedView.OnSeekBarRangedChangeListener {
-            override fun onChanged(view: SeekBarRangedView?, minValue: Float, maxValue: Float) {
-                exoPlayer?.seekTo(minValue.toLong())
-            }
-
-            override fun onChanging(view: SeekBarRangedView?, minValue: Float, maxValue: Float) {
-                minSeekValue = minValue
-                maxSeekValue = maxValue
-                actvStartTime?.text = secToTime(minValue.toLong())
-                actvEndTime?.text = secToTime(maxValue.toLong())
-            }
-        })
+//        sbrvVideoTrim?.setOnSeekBarRangedChangeListener(object : SeekBarRangedView.OnSeekBarRangedChangeListener {
+//            override fun onChanged(view: SeekBarRangedView?, minValue: Float, maxValue: Float) {
+//                exoPlayer?.seekTo(minValue.toLong())
+//            }
+//
+//            override fun onChanging(view: SeekBarRangedView?, minValue: Float, maxValue: Float) {
+//                minSeekValue = minValue
+//                maxSeekValue = maxValue
+//                actvStartTime?.text = secToTime(minValue.toLong())
+//                actvEndTime?.text = secToTime(maxValue.toLong())
+//            }
+//        })
 
         setControls(false)
     }
@@ -142,10 +142,8 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     }
 
     private fun initializePlayer() {
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(
-            activity, DefaultRenderersFactory(activity),
-            DefaultTrackSelector(), DefaultLoadControl()
-        )
+        // Sử dụng SimpleExoPlayer.Builder để tạo một instance của SimpleExoPlayer
+        exoPlayer = SimpleExoPlayer.Builder(activity!!).build()
 
         ePlayer?.player = exoPlayer
 
@@ -153,14 +151,14 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 
         exoPlayer?.addListener(playerListener)
 
-        exoPlayer?.prepare(buildMediaSource(Uri.fromFile(masterAudioFile), VideoFrom.LOCAL))
-
-        exoPlayer?.seekTo(0)
+        // Sử dụng setMediaSource và prepare
+        val mediaSource = buildMediaSource(Uri.fromFile(masterAudioFile), VideoFrom.LOCAL)
+        exoPlayer?.setMediaSource(mediaSource!!)
+        exoPlayer?.prepare()
 
         exoPlayer?.seekTo(currentWindow, playbackPosition)
 
         acbCrop?.setOnClickListener {
-
             stopRunningProcess()
 
             if (!isRunning()) {
@@ -171,13 +169,11 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                 Log.v(tagName, "trimDuration: $trimDuration")
                 val convertedSeekValue = OptiCommonMethods.convertDuration(seekToValue)
                 Log.v(tagName, "convertedSeekValue: $convertedSeekValue")
-                /*val trimDurationLong = OptiCommonMethods.convertDurationInSec(trimDuration.roundToLong())
-                Log.v(tagName, "trimDurationLong: $trimDurationLong")*/
 
                 if (trimDuration.roundToLong() >= seekToValue) {
                     Toast.makeText(activity, "Please trim audio under $convertedSeekValue.", Toast.LENGTH_SHORT).show()
                 } else {
-                    //output file is generated and send to video processing
+                    // Tạo file đầu ra và gửi đến xử lý video
                     val outputFile = OptiUtils.createAudioFile(context!!)
                     Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
@@ -198,18 +194,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         }
     }
 
-    private val playerListener = object : Player.EventListener {
-        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
-        }
-
-        override fun onSeekProcessed() {
-        }
-
-        override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-        }
-
-        override fun onPlayerError(error: ExoPlaybackException?) {
-        }
+    private val playerListener = object : Player.Listener {
 
         override fun onLoadingChanged(isLoading: Boolean) {
             pbLoading?.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -222,10 +207,6 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         }
 
         override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
-        }
-
-        override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {
-
         }
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
@@ -245,12 +226,12 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                 if (!durationSet) {
                     durationSet = true
                     val duration = exoPlayer?.duration
-                    sbrvVideoTrim?.maxValue = duration?.toFloat()!!
+                    sbrvVideoTrim?.setMaxValue(duration?.toFloat()!!)
                     actvStartTime?.text = secToTime(0)
-                    actvEndTime?.text = secToTime(duration)
+                    actvEndTime?.text = secToTime(duration?:0)
                     //set min & max seek value for audio trimming
                     minSeekValue = 0F
-                    maxSeekValue = duration.toFloat()
+                    maxSeekValue = duration?.toFloat()?:0f
                 }
             }
         }
