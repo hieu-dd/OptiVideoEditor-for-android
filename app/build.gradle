@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdk 33
     defaultConfig {
         applicationId "com.obs.marveleditor"
         minSdkVersion 24
-        targetSdkVersion targetSdk
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -29,7 +28,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21"
 
     // AndroidX libraries
     implementation "androidx.appcompat:appcompat:1.0.2"
@@ -37,25 +36,25 @@ dependencies {
     implementation "com.google.android.material:material:1.0.0"
 
     // ExoPlayer
-    implementation "com.google.android.exoplayer:exoplayer-core:${exoPlayerCore}"
-    implementation "com.google.android.exoplayer:exoplayer-dash:${exoPlayer}"
-    implementation "com.google.android.exoplayer:exoplayer-ui:${exoPlayer}"
+    implementation "com.google.android.exoplayer:exoplayer-core:2.19.1"
+    implementation "com.google.android.exoplayer:exoplayer-dash:2.19.1"
+    implementation "com.google.android.exoplayer:exoplayer-ui:2.19.1"
 
     // FFmpeg
-    implementation "com.writingminds:FFmpegAndroid:${FFmpeg}"
-    implementation "org.jcodec:jcodec-android:${jcodec}"
+    implementation "com.writingminds:FFmpegAndroid:0.3.2"
+    implementation "org.jcodec:jcodec-android:0.1.9"
 
     // Seekbar
-    implementation "com.github.guilhe:seekbar-ranged-view:${seekbar}"
+    implementation "com.github.guilhe:seekbar-ranged-view:3.0.0"
 
     // TextSize
-    implementation "com.intuit.sdp:sdp-android:${sdpSize}"
+    implementation "com.intuit.sdp:sdp-android:1.0.6"
 
     // GlideToast
-    implementation "com.github.imjeevandeshmukh:GlideToast:${GlideToast}"
+    implementation "com.github.imjeevandeshmukh:GlideToast:1.0"
 
     // Fresco
-    implementation "com.facebook.fresco:fresco:${fresco}"
+    implementation "com.facebook.fresco:fresco:1.9.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
