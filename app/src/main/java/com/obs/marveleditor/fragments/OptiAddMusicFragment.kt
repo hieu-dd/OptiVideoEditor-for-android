@@ -31,6 +31,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import com.github.guilhe.views.SeekBarRangedView
+import com.github.guilhe.views.addActionListener
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
@@ -46,6 +47,7 @@ import com.obs.marveleditor.utils.VideoFrom
 import com.obs.marveleditor.utils.VideoUtils.buildMediaSource
 import com.obs.marveleditor.utils.VideoUtils.secToTime
 import java.io.File
+import kotlin.math.roundToLong
 
 class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
     OptiFFMpegCallback {
@@ -120,20 +122,14 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         tvSelectedAudio?.setOnClickListener {
             checkPermission(OptiConstant.AUDIO_GALLERY, Manifest.permission.READ_EXTERNAL_STORAGE)
         }
-
-//        sbrvVideoTrim?.setOnSeekBarRangedChangeListener(object : SeekBarRangedView.OnSeekBarRangedChangeListener {
-//            override fun onChanged(view: SeekBarRangedView?, minValue: Float, maxValue: Float) {
-//                exoPlayer?.seekTo(minValue.toLong())
-//            }
-//
-//            override fun onChanging(view: SeekBarRangedView?, minValue: Float, maxValue: Float) {
-//                minSeekValue = minValue
-//                maxSeekValue = maxValue
-//                actvStartTime?.text = secToTime(minValue.toLong())
-//                actvEndTime?.text = secToTime(maxValue.toLong())
-//            }
-//        })
-
+        sbrvVideoTrim?.addActionListener(onChanged = { minValue: Float, maxValue: Float ->
+            exoPlayer?.seekTo(minValue.toLong())
+        }, onChanging = { minValue: Float, maxValue: Float ->
+            minSeekValue = minValue
+            maxSeekValue = maxValue
+            actvStartTime?.text = secToTime(minValue.toLong())
+            actvEndTime?.text = secToTime(maxValue.toLong())
+        })
         setControls(false)
     }
 
@@ -176,26 +172,27 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                 val convertedSeekValue = OptiCommonMethods.convertDuration(seekToValue)
                 Log.v(tagName, "convertedSeekValue: $convertedSeekValue")
 
-//                if (trimDuration.roundToLong() >= seekToValue) {
-//                    Toast.makeText(activity, "Please trim audio under $convertedSeekValue.", Toast.LENGTH_SHORT).show()
-//                } else {
-                // Tạo file đầu ra và gửi đến xử lý video
-                val outputFile = OptiUtils.createAudioFile(requireContext())
-                Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
+                if (trimDuration.roundToLong() >= seekToValue) {
+                    Toast.makeText(
+                        activity,
+                        "Please trim audio under $convertedSeekValue.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    // Tạo file đầu ra và gửi đến xử lý video
+                    val outputFile = OptiUtils.createAudioFile(requireContext())
+                    Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-                nextAction = 1
-
-
-
-
-                OptiVideoEditor.with(requireContext())
-                    .setType(OptiConstant.AUDIO_TRIM)
-                    .setAudioFile(masterAudioFile!!)
-                    .setOutputPath(outputFile.absolutePath)
-                    .setStartTime(actvStartTime?.text.toString())
-                    .setEndTime(actvEndTime?.text.toString())
-                    .setCallback(this)
-                    .main()
+                    nextAction = 1
+                    OptiVideoEditor.with(requireContext())
+                        .setType(OptiConstant.AUDIO_TRIM)
+                        .setAudioFile(masterAudioFile!!)
+                        .setOutputPath(outputFile.absolutePath)
+                        .setStartTime(actvStartTime?.text.toString())
+                        .setEndTime(actvEndTime?.text.toString())
+                        .setCallback(this)
+                        .main()
+                }
 
             } else {
                 showInProgressToast()

@@ -154,9 +154,6 @@ object OptiUtils {
         return File.createTempFile(videoFileName, OptiConstant.VIDEO_FORMAT, storageDir)
     }
 
-
-
-
     fun createAudioFile(context: Context): File {
         val timeStamp: String =
             SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
