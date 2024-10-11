@@ -122,7 +122,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         mContext = context
 
         //add video editing options
-        //videoOptions.add(OptiConstant.FLIRT)
+        videoOptions.add(OptiConstant.FLIRT)
         videoOptions.add(OptiConstant.TRIM)
         videoOptions.add(OptiConstant.MUSIC)
         videoOptions.add(OptiConstant.PLAYBACK)

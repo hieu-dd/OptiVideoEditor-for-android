@@ -111,10 +111,10 @@ class OptiFilterFragment : BottomSheetDialogFragment(), OptiFilterListener, Opti
 
         filterList.add("Black and White")
         filterList.add("Vignette")
-        /*filterList.add("Vertigo")
+        filterList.add("Vertigo")
         filterList.add("Sobel")
         filterList.add("Sepia")
-        filterList.add("Grayscale")*/
+        filterList.add("Grayscale")
 
         bmThumbnail = ThumbnailUtils.createVideoThumbnail(
             videoFile!!.absolutePath,

@@ -170,14 +170,17 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                 val convertedSeekValue = OptiCommonMethods.convertDuration(seekToValue)
                 Log.v(tagName, "convertedSeekValue: $convertedSeekValue")
 
-                if (trimDuration.roundToLong() >= seekToValue) {
-                    Toast.makeText(activity, "Please trim audio under $convertedSeekValue.", Toast.LENGTH_SHORT).show()
-                } else {
+//                if (trimDuration.roundToLong() >= seekToValue) {
+//                    Toast.makeText(activity, "Please trim audio under $convertedSeekValue.", Toast.LENGTH_SHORT).show()
+//                } else {
                     // Tạo file đầu ra và gửi đến xử lý video
                     val outputFile = OptiUtils.createAudioFile(context!!)
                     Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
                     nextAction = 1
+
+
+
 
                     OptiVideoEditor.with(context!!)
                         .setType(OptiConstant.AUDIO_TRIM)
@@ -187,7 +190,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                         .setEndTime(actvEndTime?.text.toString())
                         .setCallback(this)
                         .main()
-                }
+
             } else {
                 showInProgressToast()
             }
