@@ -19,18 +19,19 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.R
 import com.obs.marveleditor.adapter.OptiClipArtAdapter
 import com.obs.marveleditor.adapter.OptiPositionAdapter
 import com.obs.marveleditor.interfaces.OptiClipArtListener
-import com.obs.marveleditor.interfaces.OptiPositionListener
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.interfaces.OptiPositionListener
+import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import java.io.File
 
-class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener, OptiPositionListener,
+class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
+    OptiPositionListener,
     OptiFFMpegCallback {
 
     private var tagName: String = OptiAddClipArtFragment::class.java.simpleName
@@ -51,7 +52,11 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
     private var selectedFilePath: String? = null
     private var mContext: Context? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.opti_fragment_add_clip_art, container, false)
         return rootView
     }
@@ -87,7 +92,8 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
             }
         }
 
-        optiClipArtAdapter = OptiClipArtAdapter(clipArtFilePath, activity!!.applicationContext, this)
+        optiClipArtAdapter =
+            OptiClipArtAdapter(clipArtFilePath, activity!!.applicationContext, this)
         rvClipArt.adapter = optiClipArtAdapter
         optiClipArtAdapter.notifyDataSetChanged()
 
@@ -135,7 +141,10 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
                         }
                     }
                 } else {
-                    OptiUtils.showGlideToast(activity!!, getString(R.string.error_select_sticker_pos))
+                    OptiUtils.showGlideToast(
+                        activity!!,
+                        getString(R.string.error_select_sticker_pos)
+                    )
                 }
             } else {
                 OptiUtils.showGlideToast(activity!!, getString(R.string.error_select_sticker))

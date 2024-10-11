@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
   ~ * */
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_160sdp"
@@ -22,7 +20,7 @@
             android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
     <ImageView
             android:id="@+id/iv_done"
@@ -33,7 +31,7 @@
             android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
     <androidx.cardview.widget.CardView
             android:id="@+id/cardViewOne"
@@ -50,15 +48,15 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_close"
             app:layout_constraintBottom_toBottomOf="parent">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/iv_video_one"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
-            app:placeholderImage="@drawable/ic_baseline_add_24px"
-            app:roundedCornerRadius="@dimen/_15sdp"
-            android:background="@drawable/curve_shape_bg"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/iv_video_one"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                app:placeholderImage="@drawable/ic_baseline_add_24px"
+                app:roundedCornerRadius="@dimen/_15sdp"
+                android:background="@drawable/curve_shape_bg" />
 
     </androidx.cardview.widget.CardView>
 
@@ -77,15 +75,15 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_done"
             app:layout_constraintBottom_toBottomOf="parent">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/iv_video_two"
-            android:layout_width="@dimen/_75sdp"
-            android:layout_height="@dimen/_75sdp"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
-            app:placeholderImage="@drawable/ic_baseline_add_24px"
-            app:roundedCornerRadius="@dimen/_15sdp"
-            android:background="@drawable/curve_shape_bg"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/iv_video_two"
+                android:layout_width="@dimen/_75sdp"
+                android:layout_height="@dimen/_75sdp"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                app:placeholderImage="@drawable/ic_baseline_add_24px"
+                app:roundedCornerRadius="@dimen/_15sdp"
+                android:background="@drawable/curve_shape_bg" />
 
     </androidx.cardview.widget.CardView>
 
@@ -102,7 +100,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="@+id/cardViewOne"
             app:layout_constraintTop_toBottomOf="@+id/cardViewOne"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
             android:layout_width="wrap_content"
@@ -116,6 +114,6 @@
             app:layout_constraintStart_toStartOf="@+id/cardViewTwo"
             app:layout_constraintEnd_toEndOf="@+id/cardViewTwo"
             app:layout_constraintTop_toBottomOf="@+id/cardViewTwo"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,8 @@
 
 package com.obs.marveleditor.videoTrimmer;
 
+import static com.obs.marveleditor.videoTrimmer.utils.OptiTrimVideoUtils.stringForTime;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,12 +22,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.obs.marveleditor.R;
 import com.obs.marveleditor.videoTrimmer.interfaces.OptiOnHgLVideoListener;
@@ -39,17 +45,17 @@ import com.obs.marveleditor.videoTrimmer.view.OptiRangeSeekBarView;
 import com.obs.marveleditor.videoTrimmer.view.OptiThumb;
 import com.obs.marveleditor.videoTrimmer.view.OptiTimeLineView;
 
-import static com.obs.marveleditor.videoTrimmer.utils.OptiTrimVideoUtils.stringForTime;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OptiHgLVideoTrimmer extends FrameLayout {
 
     private static final String TAG = OptiHgLVideoTrimmer.class.getSimpleName();
     //private static final int MIN_TIME_FRAME = 1000;
     private static final int SHOW_PROGRESS = 2;
-
+    private final MessageHandler mMessageHandler = new MessageHandler(this);
     private SeekBar mHolderTopView;
     private OptiRangeSeekBarView mRangeSeekBarView;
     private RelativeLayout mLinearVideo;
@@ -60,25 +66,19 @@ public class OptiHgLVideoTrimmer extends FrameLayout {
     private TextView mTextTimeFrame;
     private TextView mTextTime;
     private OptiTimeLineView mTimeLineView;
-
     private OptiProgressBarView mVideoProgressIndicator;
     private Uri mSrc;
     private String mFinalPath;
-
     private int mMaxDuration;
     private List<OptiOnProgressVideoListener> mListeners;
-
     private OptiOnTrimVideoListener mOnTrimVideoListener;
     private OptiOnHgLVideoListener mOnHgLVideoListener;
-
     private int mDuration = 0;
     private int mTimeVideo = 0;
     private int mStartPosition = 0;
     private int mEndPosition = 0;
-
     private long mOriginSizeFile;
     private boolean mResetSeekBar = true;
-    private final MessageHandler mMessageHandler = new MessageHandler(this);
 
     public OptiHgLVideoTrimmer(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -147,26 +147,26 @@ public class OptiHgLVideoTrimmer extends FrameLayout {
 
         mRangeSeekBarView.addOnRangeSeekBarListener(mVideoProgressIndicator);
         mRangeSeekBarView.addOnRangeSeekBarListener(new OptiOnRangeSeekBarListener() {
-                                                        @Override
-                                                        public void onCreate(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
+            @Override
+            public void onCreate(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
 
-                                                        }
+            }
 
-                                                        @Override
-                                                        public void onSeek(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
-                                                            onSeekThumbs(index, value);
-                                                        }
+            @Override
+            public void onSeek(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
+                onSeekThumbs(index, value);
+            }
 
-                                                        @Override
-                                                        public void onSeekStart(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
+            @Override
+            public void onSeekStart(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
 
-                                                        }
+            }
 
-                                                        @Override
-                                                        public void onSeekStop(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
-                                                            onStopSeekThumbs();
-                                                        }
-                                                    });
+            @Override
+            public void onSeekStop(OptiRangeSeekBarView rangeSeekBarView, int index, float value) {
+                onStopSeekThumbs();
+            }
+        });
 
         mHolderTopView.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -212,7 +212,7 @@ public class OptiHgLVideoTrimmer extends FrameLayout {
         int finalDuration = mEndPosition - mStartPosition;
 
         //check if timeinmillis duration is less than 4 minutes
-        if(finalDuration < 240000){
+        if (finalDuration < 240000) {
             mPlayView.setVisibility(View.VISIBLE);
             mVideoView.pause();
 
@@ -482,9 +482,9 @@ public class OptiHgLVideoTrimmer extends FrameLayout {
      */
     @SuppressWarnings("unused")
     public void setMaxDuration(int maxDuration) {
-       // mMaxDuration = maxDuration * 1000;
+        // mMaxDuration = maxDuration * 1000;
         mMaxDuration = maxDuration;
-     }
+    }
 
     /**
      * Sets the uri of the video to be trimmer

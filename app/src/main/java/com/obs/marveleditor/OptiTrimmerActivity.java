@@ -89,14 +89,14 @@ public class OptiTrimmerActivity extends AppCompatActivity implements OptiOnTrim
         mProgressDialog.cancel();
 
         runOnUiThread(() -> {
-           // Toast.makeText(OptiTrimmerActivity.this, message, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(OptiTrimmerActivity.this, message, Toast.LENGTH_SHORT).show();
         });
     }
 
     @Override
     public void onVideoPrepared() {
         runOnUiThread(() -> {
-           // Toast.makeText(OptiTrimmerActivity.this, "onVideoPrepared", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(OptiTrimmerActivity.this, "onVideoPrepared", Toast.LENGTH_SHORT).show();
         });
     }
 }

@@ -25,7 +25,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.obs.marveleditor.R
-import java.util.*
+import java.util.Vector
 
 
 class OptiBarThumb private constructor() {
@@ -34,7 +34,7 @@ class OptiBarThumb private constructor() {
         private set
     var `val`: Float = 0.toFloat()
     var pos: Float = 0.toFloat()
-    var bitmap: Bitmap? =null
+    var bitmap: Bitmap? = null
         private set(bitmap) {
             field = bitmap
             widthBitmap = bitmap?.width ?: 24
@@ -68,7 +68,7 @@ class OptiBarThumb private constructor() {
                     th.bitmap = (BitmapFactory.decodeResource(resources, resImageLeft))
                 } else {
                     val resImageRight = R.drawable.ic_video_cutline
-                    th.bitmap  = (BitmapFactory.decodeResource(resources, resImageRight))
+                    th.bitmap = (BitmapFactory.decodeResource(resources, resImageRight))
                 }
                 barThumbs.add(th)
             }

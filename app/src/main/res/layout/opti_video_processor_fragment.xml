@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
   ~ * */
   -->
 
-<androidx.core.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +21,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/exoPlayer"/>
+                app:layout_constraintBottom_toTopOf="@+id/exoPlayer" />
 
         <include
                 android:id="@+id/exoPlayer"
@@ -33,7 +31,7 @@
                 android:layout_marginTop="?android:attr/actionBarSize"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
                 android:id="@+id/tvInfo"
@@ -48,7 +46,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +68,7 @@
                     android:progressBackgroundTint="@color/light_blue"
                     android:indeterminateTint="@color/blue"
                     android:layout_marginTop="@dimen/_25sdp"
-                    style="?android:attr/progressBarStyleHorizontal"/>
+                    style="?android:attr/progressBarStyleHorizontal" />
 
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvVideoProcessing"
@@ -80,7 +78,7 @@
                     android:textColor="@color/white"
                     android:visibility="invisible"
                     android:text="@string/processing_video"
-                    android:layout_marginBottom="@dimen/_10sdp"/>
+                    android:layout_marginBottom="@dimen/_10sdp" />
 
         </LinearLayout>
 
@@ -91,14 +89,14 @@
                 android:layout_marginTop="@dimen/_160sdp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/guideline"
                 app:layout_constraintGuide_percent="0.9"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
 
         <ImageButton
                 android:layout_width="0dp"
@@ -111,7 +109,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/ibCamera"
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/ibGallery"
-                android:contentDescription="@string/app_name"/>
+                android:contentDescription="@string/app_name" />
 
         <ImageButton
                 android:layout_width="0dp"
@@ -124,7 +122,7 @@
                 app:layout_constraintStart_toEndOf="@+id/ibGallery"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/ibCamera"
-                android:contentDescription="@string/app_name"/>
+                android:contentDescription="@string/app_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

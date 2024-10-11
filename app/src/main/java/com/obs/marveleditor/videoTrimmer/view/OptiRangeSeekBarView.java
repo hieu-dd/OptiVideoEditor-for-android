@@ -26,6 +26,8 @@ import java.util.List;
 
 public class OptiRangeSeekBarView extends View {
 
+    private final Paint mShadow = new Paint();
+    private final Paint mLine = new Paint();
     //private static final String TAG = RangeSeekBarView.class.getSimpleName();
     private int mHeightTimeLine;
     private List<OptiThumb> mThumbs;
@@ -38,8 +40,7 @@ public class OptiRangeSeekBarView extends View {
     private float mPixelRangeMax;
     private float mScaleRangeMax;
     private boolean mFirstRun;
-    private final Paint mShadow = new Paint();
-    private final Paint mLine = new Paint();
+    private int currentThumb = 0;
 
     public OptiRangeSeekBarView(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -115,8 +116,6 @@ public class OptiRangeSeekBarView extends View {
         drawShadow(canvas);
         drawThumbs(canvas);
     }
-
-    private int currentThumb = 0;
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent ev) {

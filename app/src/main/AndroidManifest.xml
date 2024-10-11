@@ -1,20 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
   ~ * */
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-          package="com.obs.marveleditor">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.obs.marveleditor">
 
-    <uses-permission android:name="android.permission.CAMERA"
+    <uses-permission
+            android:name="android.permission.CAMERA"
             tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-                     tools:node="replace"/>
-    <uses-permission android:name="com.android.providers.media.MediaProvider"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            tools:node="replace" />
+    <uses-permission android:name="com.android.providers.media.MediaProvider" />
 
     <application
             android:icon="@mipmap/ic_launcher"
@@ -27,26 +29,27 @@
             android:allowBackup="false">
 
         <!--OptiSplashScreen-->
-        <activity android:name="com.obs.marveleditor.OptiSplashScreen"
+        <activity
+                android:name="com.obs.marveleditor.OptiSplashScreen"
                 android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!--MainActivity-->
-        <activity android:name="com.obs.marveleditor.MainActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden">
-        </activity>
+        <activity
+                android:name="com.obs.marveleditor.MainActivity"
+                android:screenOrientation="portrait"
+                android:configChanges="orientation|keyboardHidden"></activity>
 
         <!--OptiTrimmerActivity-->
-        <activity android:name="com.obs.marveleditor.OptiTrimmerActivity"
-                  android:screenOrientation="portrait"
-                  android:configChanges="orientation|keyboardHidden">
-        </activity>
+        <activity
+                android:name="com.obs.marveleditor.OptiTrimmerActivity"
+                android:screenOrientation="portrait"
+                android:configChanges="orientation|keyboardHidden"></activity>
 
         <!--FileProvider-->
         <provider
@@ -56,7 +59,7 @@
                 android:grantUriPermissions="true">
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/provider_paths"/>
+                    android:resource="@xml/provider_paths" />
         </provider>
 
     </application>

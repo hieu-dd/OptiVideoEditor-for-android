@@ -24,9 +24,9 @@ public final class OptiBackgroundExecutor {
     private static final String TAG = "OptiBackgroundExecutor";
 
     private static final Executor DEFAULT_EXECUTOR = Executors.newScheduledThreadPool(2 * Runtime.getRuntime().availableProcessors());
-    private static Executor executor = DEFAULT_EXECUTOR;
     private static final List<Task> TASKS = new ArrayList<>();
     private static final ThreadLocal<String> CURRENT_SERIAL = new ThreadLocal<>();
+    private static final Executor executor = DEFAULT_EXECUTOR;
 
     private OptiBackgroundExecutor() {
     }
@@ -49,14 +49,12 @@ public final class OptiBackgroundExecutor {
         Future<?> future = null;
         if (delay > 0) {
             /* no serial, but a delay: schedule the task */
-            if (!(executor instanceof ScheduledExecutorService)) {
+            if (!(executor instanceof ScheduledExecutorService scheduledExecutorService)) {
                 throw new IllegalArgumentException("The executor set does not support scheduling");
             }
-            ScheduledExecutorService scheduledExecutorService = (ScheduledExecutorService) executor;
             future = scheduledExecutorService.schedule(runnable, delay, TimeUnit.MILLISECONDS);
         } else {
-            if (executor instanceof ExecutorService) {
-                ExecutorService executorService = (ExecutorService) executor;
+            if (executor instanceof ExecutorService executorService) {
                 future = executorService.submit(runnable);
             } else {
                 /* non-cancellable task */
@@ -139,17 +137,17 @@ public final class OptiBackgroundExecutor {
                 if (task.future != null) {
                     task.future.cancel(mayInterruptIfRunning);
                     if (!task.managed.getAndSet(true)) {
-						/*
-						 * the task has been submitted to the executor, but its
-						 * execution has not started yet, so that its run()
-						 * method will never call postExecute()
-						 */
+                        /*
+                         * the task has been submitted to the executor, but its
+                         * execution has not started yet, so that its run()
+                         * method will never call postExecute()
+                         */
                         task.postExecute();
                     }
                 } else if (task.executionAsked) {
                     Log.w(TAG, "A task with id " + task.id + " cannot be cancelled (the executor set does not support it)");
                 } else {
-					/* this task has not been submitted to the executor */
+                    /* this task has not been submitted to the executor */
                     TASKS.remove(i);
                 }
             }
@@ -177,7 +175,7 @@ public final class OptiBackgroundExecutor {
          * This flag guarantees that either cancelAll() or run() manages this
          * task post execution, but not both.
          */
-        private AtomicBoolean managed = new AtomicBoolean();
+        private final AtomicBoolean managed = new AtomicBoolean();
 
         public Task(String id, long delay, String serial) {
             if (!"".equals(id)) {
@@ -212,22 +210,22 @@ public final class OptiBackgroundExecutor {
 
         private void postExecute() {
             if (id == null && serial == null) {
-				/* nothing to do */
+                /* nothing to do */
                 return;
             }
             CURRENT_SERIAL.set(null);
             synchronized (OptiBackgroundExecutor.class) {
-				/* execution complete */
+                /* execution complete */
                 TASKS.remove(this);
 
                 if (serial != null) {
                     Task next = take(serial);
                     if (next != null) {
                         if (next.remainingDelay != 0) {
-							/* the delay may not have elapsed yet */
+                            /* the delay may not have elapsed yet */
                             next.remainingDelay = Math.max(0L, targetTimeMillis - System.currentTimeMillis());
                         }
-						/* a task having the same serial was queued, execute it */
+                        /* a task having the same serial was queued, execute it */
                         OptiBackgroundExecutor.execute(next);
                     }
                 }

@@ -14,13 +14,18 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.TimeUnit;
 
 public class OptiCommonMethods {
 
-    private static String tagName = OptiCommonMethods.class.getSimpleName();
+    private static final String tagName = OptiCommonMethods.class.getSimpleName();
 
     //write intent data into file
     public static File writeIntoFile(Context context, Intent data, File file) {

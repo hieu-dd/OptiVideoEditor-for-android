@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
   ~ * */
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:custom="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:custom="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black">
@@ -22,7 +21,7 @@
             android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
     <ImageView
             android:id="@+id/iv_done"
@@ -33,7 +32,7 @@
             android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/app_name"/>
+            android:contentDescription="@string/app_name" />
 
     <com.github.guilhe.views.SeekBarRangedView
             android:id="@+id/sbrvVideoTrim"
@@ -48,7 +47,7 @@
             custom:rounded="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_done"/>
+            app:layout_constraintTop_toBottomOf="@+id/iv_done" />
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -68,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:gravity="start|center_vertical"/>
+                android:gravity="start|center_vertical" />
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/actvEndTime"
@@ -76,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:gravity="end|center_vertical"/>
+                android:gravity="end|center_vertical" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

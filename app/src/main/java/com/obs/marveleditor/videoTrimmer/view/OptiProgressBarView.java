@@ -23,12 +23,10 @@ import com.obs.marveleditor.videoTrimmer.interfaces.OptiOnRangeSeekBarListener;
 
 public class OptiProgressBarView extends View implements OptiOnRangeSeekBarListener, OptiOnProgressVideoListener {
 
-    private int mProgressHeight;
-    private int mViewWidth;
-
     private final Paint mBackgroundColor = new Paint();
     private final Paint mProgressColor = new Paint();
-
+    private int mProgressHeight;
+    private int mViewWidth;
     private Rect mBackgroundRect;
     private Rect mProgressRect;
 

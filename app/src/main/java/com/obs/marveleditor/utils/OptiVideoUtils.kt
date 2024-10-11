@@ -46,12 +46,14 @@ object VideoUtils {
                         return fileDataSource
                     }
                 }
-                return ProgressiveMediaSource.Factory(factory).createMediaSource(MediaItem.fromUri(fileDataSource.uri!!))
+                return ProgressiveMediaSource.Factory(factory)
+                    .createMediaSource(MediaItem.fromUri(fileDataSource.uri!!))
             }
 
             VideoFrom.REMOTE -> {
                 val dataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(userAgent)
-                return ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri))
+                return ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(MediaItem.fromUri(uri))
             }
 
             else -> {

@@ -27,7 +27,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -37,28 +41,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.PlaybackException
+import com.google.android.exoplayer2.PlaybackParameters
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.Timeline
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.obs.marveleditor.OptiVideoEditor
-import com.obs.marveleditor.utils.OptiCommonMethods
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.R
 import com.obs.marveleditor.OptiTrimmerActivity
-import com.obs.marveleditor.utils.OptiSessionManager
+import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.R
 import com.obs.marveleditor.adapter.OptiVideoOptionsAdapter
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.interfaces.OptiVideoOptionListener
+import com.obs.marveleditor.utils.OptiCommonMethods
+import com.obs.marveleditor.utils.OptiConstant
+import com.obs.marveleditor.utils.OptiSessionManager
 import com.obs.marveleditor.utils.OptiUtils
-import com.obs.marveleditor.utils.VideoUtils
 import com.obs.marveleditor.utils.VideoFrom
+import com.obs.marveleditor.utils.VideoUtils
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.CallBacks,
     OptiVideoOptionListener,
@@ -96,7 +102,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         rootView = inflater.inflate(R.layout.opti_video_processor_fragment, container, false)
         initView(rootView)
         return rootView
@@ -205,7 +211,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         //for playing video in landscape mode
-        if (newConfig!!.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Log.v(tagName, "orientation: ORIENTATION_LANDSCAPE")
             orientationLand = true
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -489,7 +495,8 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                     if (resultCode == RESULT_OK) {
                         masterVideoFile = OptiCommonMethods.writeIntoFile(activity, data, videoFile)
 
-                        val timeInMillis = OptiUtils.getVideoDuration(requireContext(), masterVideoFile!!)
+                        val timeInMillis =
+                            OptiUtils.getVideoDuration(requireContext(), masterVideoFile!!)
                         Log.v(tagName, "timeInMillis: $timeInMillis")
                         val duration = OptiCommonMethods.convertDurationInMin(timeInMillis)
                         Log.v(tagName, "videoDuration: $duration")
@@ -568,7 +575,8 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                         val extension =
                             OptiCommonMethods.getFileExtension(masterVideoFile!!.absolutePath)
 
-                        val timeInMillis = OptiUtils.getVideoDuration(requireContext(), masterVideoFile!!)
+                        val timeInMillis =
+                            OptiUtils.getVideoDuration(requireContext(), masterVideoFile!!)
                         Log.v(tagName, "timeInMillis: $timeInMillis")
                         val duration = OptiCommonMethods.convertDurationInMin(timeInMillis)
                         Log.v(tagName, "videoDuration: $duration")
@@ -671,7 +679,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         }
 
         override fun onPlayerError(error: PlaybackException) {
-            Log.v(tagName, "onPlayerError: ${error.toString()}")
+            Log.v(tagName, "onPlayerError: $error")
             Toast.makeText(mContext, "Video format is not supported", Toast.LENGTH_LONG).show()
         }
 

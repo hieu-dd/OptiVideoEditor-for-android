@@ -17,7 +17,12 @@ import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiVideoOptionListener
 import com.obs.marveleditor.utils.OptiConstant
 
-class OptiVideoOptionsAdapter(videoOptions: ArrayList<String>, val context: Context, optiVideoOptionListener: OptiVideoOptionListener, orientationLand: Boolean) :
+class OptiVideoOptionsAdapter(
+    videoOptions: ArrayList<String>,
+    val context: Context,
+    optiVideoOptionListener: OptiVideoOptionListener,
+    orientationLand: Boolean
+) :
     RecyclerView.Adapter<OptiVideoOptionsAdapter.MyPostViewHolder>() {
 
     private var myVideoOptions = videoOptions
@@ -25,17 +30,21 @@ class OptiVideoOptionsAdapter(videoOptions: ArrayList<String>, val context: Cont
     var myOrientationLand = orientationLand
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyPostViewHolder {
-        return if(myOrientationLand) {
-            MyPostViewHolder(LayoutInflater.from(context).inflate(R.layout.opti_option_view_land, p0, false))
+        return if (myOrientationLand) {
+            MyPostViewHolder(
+                LayoutInflater.from(context).inflate(R.layout.opti_option_view_land, p0, false)
+            )
         } else {
-            MyPostViewHolder(LayoutInflater.from(context).inflate(R.layout.opti_option_view, p0, false))
+            MyPostViewHolder(
+                LayoutInflater.from(context).inflate(R.layout.opti_option_view, p0, false)
+            )
         }
     }
 
     override fun onBindViewHolder(p0: MyPostViewHolder, p1: Int) {
 
         //set image based on video option
-        when(myVideoOptions[p1]){
+        when (myVideoOptions[p1]) {
             OptiConstant.FLIRT -> {
                 p0.ivOption.setImageResource(R.drawable.video_conference_24)
             }

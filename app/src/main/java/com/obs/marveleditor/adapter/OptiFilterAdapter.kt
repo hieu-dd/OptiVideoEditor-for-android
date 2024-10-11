@@ -22,7 +22,12 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiFilterListener
 
-class OptiFilterAdapter(filterList: ArrayList<String>, bitmap: Bitmap, val context: Context, optiFilterListener: OptiFilterListener) :
+class OptiFilterAdapter(
+    filterList: ArrayList<String>,
+    bitmap: Bitmap,
+    val context: Context,
+    optiFilterListener: OptiFilterListener
+) :
     RecyclerView.Adapter<OptiFilterAdapter.MyPostViewHolder>() {
 
     private var tagName: String = OptiFilterAdapter::class.java.simpleName
@@ -33,10 +38,15 @@ class OptiFilterAdapter(filterList: ArrayList<String>, bitmap: Bitmap, val conte
     private var selectedFilter: String? = null
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyPostViewHolder {
-        return MyPostViewHolder(LayoutInflater.from(context).inflate(R.layout.opti_filter_view, p0, false))
+        return MyPostViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.opti_filter_view, p0, false)
+        )
     }
 
-    override fun onBindViewHolder(holder: MyPostViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(
+        holder: MyPostViewHolder,
+        @SuppressLint("RecyclerView") position: Int
+    ) {
         holder.tvFilter.text = myFilterList[position]
 
         if (selectedPosition == position) {

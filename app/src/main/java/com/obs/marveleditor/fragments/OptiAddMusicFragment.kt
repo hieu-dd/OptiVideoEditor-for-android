@@ -21,32 +21,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
-import com.obs.marveleditor.utils.OptiConstant
-import com.obs.marveleditor.R
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.VideoUtils.buildMediaSource
-import com.obs.marveleditor.utils.VideoUtils.secToTime
-import com.obs.marveleditor.utils.VideoFrom
-import com.obs.marveleditor.interfaces.OptiDialogueHelper
 import com.github.guilhe.views.SeekBarRangedView
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.Util
 import com.obs.marveleditor.OptiVideoEditor
+import com.obs.marveleditor.R
+import com.obs.marveleditor.interfaces.OptiDialogueHelper
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiCommonMethods
+import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
+import com.obs.marveleditor.utils.VideoFrom
+import com.obs.marveleditor.utils.VideoUtils.buildMediaSource
+import com.obs.marveleditor.utils.VideoUtils.secToTime
 import java.io.File
-import kotlin.math.roundToLong
 
-class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper, OptiFFMpegCallback {
+class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper,
+    OptiFFMpegCallback {
 
     private var tagName: String = OptiAddMusicFragment::class.java.simpleName
     private var audioFile: File? = null
@@ -76,7 +78,11 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     private var maxSeekValue: Float = 0F
     private var mContext: Context? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val inflate = inflater.inflate(R.layout.opti_add_music_includer, container, false)
@@ -173,23 +179,23 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 //                if (trimDuration.roundToLong() >= seekToValue) {
 //                    Toast.makeText(activity, "Please trim audio under $convertedSeekValue.", Toast.LENGTH_SHORT).show()
 //                } else {
-                    // Tạo file đầu ra và gửi đến xử lý video
-                    val outputFile = OptiUtils.createAudioFile(requireContext())
-                    Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
+                // Tạo file đầu ra và gửi đến xử lý video
+                val outputFile = OptiUtils.createAudioFile(requireContext())
+                Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-                    nextAction = 1
-
-
+                nextAction = 1
 
 
-                    OptiVideoEditor.with(requireContext())
-                        .setType(OptiConstant.AUDIO_TRIM)
-                        .setAudioFile(masterAudioFile!!)
-                        .setOutputPath(outputFile.absolutePath)
-                        .setStartTime(actvStartTime?.text.toString())
-                        .setEndTime(actvEndTime?.text.toString())
-                        .setCallback(this)
-                        .main()
+
+
+                OptiVideoEditor.with(requireContext())
+                    .setType(OptiConstant.AUDIO_TRIM)
+                    .setAudioFile(masterAudioFile!!)
+                    .setOutputPath(outputFile.absolutePath)
+                    .setStartTime(actvStartTime?.text.toString())
+                    .setEndTime(actvEndTime?.text.toString())
+                    .setCallback(this)
+                    .main()
 
             } else {
                 showInProgressToast()
@@ -231,10 +237,10 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                     val duration = exoPlayer?.duration
                     sbrvVideoTrim?.setMaxValue(duration?.toFloat()!!)
                     actvStartTime?.text = secToTime(0)
-                    actvEndTime?.text = secToTime(duration?:0)
+                    actvEndTime?.text = secToTime(duration ?: 0)
                     //set min & max seek value for audio trimming
                     minSeekValue = 0F
-                    maxSeekValue = duration?.toFloat()?:0f
+                    maxSeekValue = duration?.toFloat() ?: 0f
                 }
             }
         }
@@ -280,12 +286,20 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         requestPermissions(arrayOf(permission), requestCode)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             OptiConstant.AUDIO_GALLERY -> {
                 for (permission in permissions) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, permission)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity as Activity,
+                            permission
+                        )
+                    ) {
                         //Toast.makeText(this@EditProfileActivity, "Permission Denied", Toast.LENGTH_SHORT).show()
                     } else {
                         if (ActivityCompat.checkSelfPermission(
@@ -294,14 +308,21 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                             ) == PackageManager.PERMISSION_GRANTED
                         ) {
                             //call the gallery intent
-                            val i = Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
+                            val i = Intent(
+                                Intent.ACTION_PICK,
+                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                            )
                             i.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("audio/*", "video/*"))
                             startActivityForResult(i, OptiConstant.AUDIO_GALLERY)
 
                         } else {
                             val intent = Intent()
                             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            val uri = Uri.fromParts("package", requireContext().applicationContext.packageName, null)
+                            val uri = Uri.fromParts(
+                                "package",
+                                requireContext().applicationContext.packageName,
+                                null
+                            )
                             intent.data = uri
                             startActivityForResult(intent, 300)
                         }
@@ -332,7 +353,13 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                 val selectedImage = data.data
 
                 val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA)
-                val cursor = requireContext().contentResolver.query(selectedImage!!, filePathColumn, null, null, null)
+                val cursor = requireContext().contentResolver.query(
+                    selectedImage!!,
+                    filePathColumn,
+                    null,
+                    null,
+                    null
+                )
                 if (cursor != null) {
                     cursor.moveToFirst()
                     val columnIndex = cursor.getColumnIndex(filePathColumn[0])

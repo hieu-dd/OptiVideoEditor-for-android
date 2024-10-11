@@ -19,7 +19,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiPositionListener
 
-class OptiPositionAdapter(positionList: ArrayList<String>, val context: Context, optiPositionListener: OptiPositionListener) :
+class OptiPositionAdapter(
+    positionList: ArrayList<String>,
+    val context: Context,
+    optiPositionListener: OptiPositionListener
+) :
     RecyclerView.Adapter<OptiPositionAdapter.MyPostViewHolder>() {
 
     private var tagName: String = OptiPositionAdapter::class.java.simpleName
@@ -29,14 +33,19 @@ class OptiPositionAdapter(positionList: ArrayList<String>, val context: Context,
     private var selectedPositionItem: String? = null
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyPostViewHolder {
-        return MyPostViewHolder(LayoutInflater.from(context).inflate(R.layout.opti_playback_view, p0, false))
+        return MyPostViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.opti_playback_view, p0, false)
+        )
     }
 
     override fun getItemCount(): Int {
         return myPositionList.size
     }
 
-    override fun onBindViewHolder(holder: MyPostViewHolder, @SuppressLint("RecyclerView") position: Int) {
+    override fun onBindViewHolder(
+        holder: MyPostViewHolder,
+        @SuppressLint("RecyclerView") position: Int
+    ) {
 
         holder.tvSpeed.text = myPositionList[position]
 
@@ -57,7 +66,7 @@ class OptiPositionAdapter(positionList: ArrayList<String>, val context: Context,
     }
 
     fun setPosition() {
-        if(selectedPositionItem != null) {
+        if (selectedPositionItem != null) {
             Log.v(tagName, "selectedPositionItem: $selectedPositionItem")
             myPositionListener.selectedPosition(selectedPositionItem!!)
         }

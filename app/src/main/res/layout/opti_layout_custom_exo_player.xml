@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
@@ -7,9 +6,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
             android:id="@+id/ll_time_control"
@@ -28,7 +27,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"
                 android:paddingStart="@dimen/_15sdp"
-                android:paddingEnd="@dimen/_15sdp"/>
+                android:paddingEnd="@dimen/_15sdp" />
 
         <TextView
                 android:layout_width="0dp"
@@ -36,7 +35,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
                 android:paddingStart="@dimen/_15sdp"
-                android:paddingEnd="@dimen/_15sdp"/>
+                android:paddingEnd="@dimen/_15sdp" />
     </LinearLayout>
 
 
@@ -66,7 +65,7 @@
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -76,7 +75,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/black"
                     app:surface_type="surface_view"
-                    app:use_controller="false"/>
+                    app:use_controller="false" />
 
             <ProgressBar
                     android:visibility="invisible"
@@ -87,7 +86,7 @@
                     android:layout_alignParentBottom="true"
                     android:indeterminate="true"
                     android:progressBackgroundTint="@color/colorDivider"
-                    android:progressTint="@color/white"/>
+                    android:progressTint="@color/white" />
 
         </RelativeLayout>
 

@@ -26,7 +26,6 @@ import com.obs.marveleditor.interfaces.OptiFilterListener
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import java.io.File
-import java.util.*
 
 class OptiTransitionFragment : BottomSheetDialogFragment(), OptiFilterListener, OptiFFMpegCallback {
 
@@ -43,7 +42,11 @@ class OptiTransitionFragment : BottomSheetDialogFragment(), OptiFilterListener, 
     private var selectedTransition: String? = null
     private var mContext: Context? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.opti_fragment_transition, container, false)
         return rootView
     }
@@ -81,7 +84,8 @@ class OptiTransitionFragment : BottomSheetDialogFragment(), OptiFilterListener, 
 
         transitionList.add("Fade in/out")
 
-        optiTransitionAdapter = OptiTransitionAdapter(transitionList, activity!!.applicationContext, this)
+        optiTransitionAdapter =
+            OptiTransitionAdapter(transitionList, activity!!.applicationContext, this)
         rvTransition.adapter = optiTransitionAdapter
         optiTransitionAdapter.notifyDataSetChanged()
     }
@@ -94,7 +98,7 @@ class OptiTransitionFragment : BottomSheetDialogFragment(), OptiFilterListener, 
         OptiVideoEditor.with(context!!)
             .setType(OptiConstant.VIDEO_TRANSITION)
             .setFile(videoFile!!)
-             //.setFilter(command)
+            //.setFilter(command)
             .setOutputPath(outputFile.path)
             .setCallback(this)
             .main()

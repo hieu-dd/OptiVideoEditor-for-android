@@ -25,7 +25,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +41,8 @@ import java.util.Objects;
 
 public class OptiCustomRangeSeekBar extends View {
 
+    private final Paint mShadow = new Paint();
+    private final Paint mLine = new Paint();
     private int mHeightTimeLine;
     private List<OptiBarThumb> mBarThumbs;
     private List<OptiOnRangeSeekBarChangeListener> mListeners;
@@ -53,9 +54,7 @@ public class OptiCustomRangeSeekBar extends View {
     private float mPixelRangeMax;
     private float mScaleRangeMax;
     private boolean mFirstRun;
-
-    private final Paint mShadow = new Paint();
-    private final Paint mLine = new Paint();
+    private int currentThumb = 0;
 
     public OptiCustomRangeSeekBar(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -131,8 +130,6 @@ public class OptiCustomRangeSeekBar extends View {
         drawShadow(canvas);
         drawThumbs(canvas);
     }
-
-    private int currentThumb = 0;
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent ev) {
@@ -245,7 +242,6 @@ public class OptiCustomRangeSeekBar extends View {
         }
 
     }
-
 
 
     private float pixelToScale(int index, float pixelValue) {

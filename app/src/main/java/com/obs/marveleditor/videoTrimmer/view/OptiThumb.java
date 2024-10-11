@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.NonNull;
 
 import com.obs.marveleditor.R;
+
 import java.util.List;
 import java.util.Vector;
 
@@ -34,6 +35,36 @@ public class OptiThumb {
     private OptiThumb() {
         mVal = 0;
         mPos = 0;
+    }
+
+    @NonNull
+    static List<OptiThumb> initThumbs(Resources resources) {
+
+        List<OptiThumb> thumbs = new Vector<>();
+
+        for (int i = 0; i < 2; i++) {
+            OptiThumb th = new OptiThumb();
+            th.setIndex(i);
+            if (i == 0) {
+                int resImageLeft = R.drawable.apptheme_text_select_handle_left;
+                th.setBitmap(BitmapFactory.decodeResource(resources, resImageLeft));
+            } else {
+                int resImageRight = R.drawable.apptheme_text_select_handle_right;
+                th.setBitmap(BitmapFactory.decodeResource(resources, resImageRight));
+            }
+
+            thumbs.add(th);
+        }
+
+        return thumbs;
+    }
+
+    static int getWidthBitmap(@NonNull List<OptiThumb> thumbs) {
+        return thumbs.get(0).getWidthBitmap();
+    }
+
+    static int getHeightBitmap(@NonNull List<OptiThumb> thumbs) {
+        return thumbs.get(0).getHeightBitmap();
     }
 
     int getIndex() {
@@ -68,36 +99,6 @@ public class OptiThumb {
         mBitmap = bitmap;
         mWidthBitmap = bitmap.getWidth();
         mHeightBitmap = bitmap.getHeight();
-    }
-
-    @NonNull
-    static List<OptiThumb> initThumbs(Resources resources) {
-
-        List<OptiThumb> thumbs = new Vector<>();
-
-        for (int i = 0; i < 2; i++) {
-            OptiThumb th = new OptiThumb();
-            th.setIndex(i);
-            if (i == 0) {
-                int resImageLeft = R.drawable.apptheme_text_select_handle_left;
-                th.setBitmap(BitmapFactory.decodeResource(resources, resImageLeft));
-            } else {
-                int resImageRight = R.drawable.apptheme_text_select_handle_right;
-                th.setBitmap(BitmapFactory.decodeResource(resources, resImageRight));
-            }
-
-            thumbs.add(th);
-        }
-
-        return thumbs;
-    }
-
-    static int getWidthBitmap(@NonNull List<OptiThumb> thumbs) {
-        return thumbs.get(0).getWidthBitmap();
-    }
-
-    static int getHeightBitmap(@NonNull List<OptiThumb> thumbs) {
-        return thumbs.get(0).getHeightBitmap();
     }
 
     float getLastTouchX() {

@@ -18,10 +18,10 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import com.github.guilhe.views.SeekBarRangedView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiUtils
 import com.obs.marveleditor.utils.VideoUtils
 import java.io.File
@@ -40,7 +40,11 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
     private var duration: Long? = null
     private var mContext: Context? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.opti_fragment_trim, container, false)
         return rootView
     }
@@ -126,7 +130,7 @@ class OptiTrimFragment : BottomSheetDialogFragment(), OptiFFMpegCallback {
     }
 
     override fun onNotAvailable(error: Exception) {
-        Log.d(tagName,"onNotAvailable() " + error.message)
+        Log.d(tagName, "onNotAvailable() " + error.message)
         Log.v(tagName, "Exception: ${error.localizedMessage}")
     }
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ * Created by Optisol on Aug 2019.
   ~ * Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
@@ -7,11 +6,11 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             android:id="@+id/clFilter"
-                                             android:background="@color/black"
-                                             android:layout_width="wrap_content"
-                                             android:layout_height="wrap_content">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/clFilter"
+        android:background="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -34,7 +33,7 @@
                 android:scaleType="fitXY"
                 app:roundedCornerRadius="@dimen/_15sdp"
                 android:adjustViewBounds="true"
-                android:background="@drawable/curve_shape_bg"/>
+                android:background="@drawable/curve_shape_bg" />
 
     </androidx.cardview.widget.CardView>
 
@@ -53,6 +52,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

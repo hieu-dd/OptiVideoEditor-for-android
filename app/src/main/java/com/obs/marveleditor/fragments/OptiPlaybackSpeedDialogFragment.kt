@@ -18,14 +18,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.OptiVideoEditor
 import com.obs.marveleditor.R
 import com.obs.marveleditor.adapter.OptiPlaybackSpeedAdapter
-import com.obs.marveleditor.interfaces.OptiPlaybackSpeedListener
-import com.obs.marveleditor.interfaces.OptiFFMpegCallback
-import com.obs.marveleditor.utils.OptiUtils
 import com.obs.marveleditor.interfaces.OptiDialogueHelper
+import com.obs.marveleditor.interfaces.OptiFFMpegCallback
+import com.obs.marveleditor.interfaces.OptiPlaybackSpeedListener
+import com.obs.marveleditor.utils.OptiConstant
+import com.obs.marveleditor.utils.OptiUtils
 import java.io.File
 
 class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogueHelper,
@@ -44,7 +44,11 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
     private var helper: OptiBaseCreatorDialogFragment.CallBacks? = null
     private var mContext: Context? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.opti_fragment_playback_speed_dialog, container, false)
         return rootView
     }
@@ -77,7 +81,8 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
         playbackSpeed.add(OptiConstant.SPEED_1_25)
         playbackSpeed.add(OptiConstant.SPEED_1_5)
 
-        optiPlaybackSpeedAdapter = OptiPlaybackSpeedAdapter(playbackSpeed, activity!!.applicationContext, this)
+        optiPlaybackSpeedAdapter =
+            OptiPlaybackSpeedAdapter(playbackSpeed, activity!!.applicationContext, this)
         rvPlaybackSpeed.adapter = optiPlaybackSpeedAdapter
         optiPlaybackSpeedAdapter.notifyDataSetChanged()
     }
@@ -120,7 +125,7 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
     }
 
     override fun onNotAvailable(error: Exception) {
-        Log.d(tagName,"onNotAvailable() " + error.message)
+        Log.d(tagName, "onNotAvailable() " + error.message)
         helper?.showLoading(false)
     }
 
@@ -143,7 +148,7 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
     }*/
 
     override fun processVideo(playbackSpeed: String, tempo: String) {
-        if(playbackSpeed != "0.0") {
+        if (playbackSpeed != "0.0") {
             //output file is generated and send to video processing
             val outputFile = OptiUtils.createVideoFile(context!!)
             Log.v(tagName, "outputFile: ${outputFile.absolutePath}")

@@ -47,7 +47,11 @@ class OptiFilterFragment : BottomSheetDialogFragment(), OptiFilterListener, Opti
     private var bmThumbnail: Bitmap? = null
     private var mContext: Context? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         rootView = inflater.inflate(R.layout.opti_fragment_filter_dialog, container, false)
         return rootView
     }
@@ -121,7 +125,8 @@ class OptiFilterFragment : BottomSheetDialogFragment(), OptiFilterListener, Opti
             MediaStore.Video.Thumbnails.FULL_SCREEN_KIND
         )
 
-        optiFilterAdapter = OptiFilterAdapter(filterList, bmThumbnail!!, activity!!.applicationContext, this)
+        optiFilterAdapter =
+            OptiFilterAdapter(filterList, bmThumbnail!!, activity!!.applicationContext, this)
         rvFilter.adapter = optiFilterAdapter
         optiFilterAdapter.notifyDataSetChanged()
     }

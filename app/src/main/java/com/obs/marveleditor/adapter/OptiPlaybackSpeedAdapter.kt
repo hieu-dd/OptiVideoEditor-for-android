@@ -19,7 +19,11 @@ import com.obs.marveleditor.R
 import com.obs.marveleditor.interfaces.OptiPlaybackSpeedListener
 import com.obs.marveleditor.utils.OptiConstant
 
-class OptiPlaybackSpeedAdapter(private val playbackList: ArrayList<String>, val context: Context, optiPlaybackSpeedListener: OptiPlaybackSpeedListener) :
+class OptiPlaybackSpeedAdapter(
+    private val playbackList: ArrayList<String>,
+    val context: Context,
+    optiPlaybackSpeedListener: OptiPlaybackSpeedListener
+) :
     RecyclerView.Adapter<OptiPlaybackSpeedAdapter.MyPostViewHolder>() {
 
     private var tagName: String = OptiPlaybackSpeedAdapter::class.java.simpleName
@@ -30,7 +34,9 @@ class OptiPlaybackSpeedAdapter(private val playbackList: ArrayList<String>, val 
     private var selectedTempo: Float = 0F
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyPostViewHolder {
-        return MyPostViewHolder(LayoutInflater.from(context).inflate(R.layout.opti_playback_view, p0, false))
+        return MyPostViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.opti_playback_view, p0, false)
+        )
     }
 
     override fun getItemCount(): Int {
