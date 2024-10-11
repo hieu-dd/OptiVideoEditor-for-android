@@ -9,6 +9,8 @@ package com.obs.marveleditor
 
 import android.content.Context
 import android.util.Log
+import com.arthenica.mobileffmpeg.ExecuteCallback
+import com.arthenica.mobileffmpeg.FFmpeg as FFmpegNew
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
@@ -191,6 +193,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
 
 
         val outputFile = File(outputFilePath)
+        outputFile.setExecutable(true)
         Log.v(tagName, "outputFilePath: $outputFilePath")
         var cmd: Array<String>? = null
 
@@ -365,30 +368,42 @@ class OptiVideoEditor private constructor(private val context: Context) {
         }
 
         try {
-            FFmpeg.getInstance(context).execute(cmd, object : ExecuteBinaryResponseHandler() {
-                override fun onStart() {
-
-                }
-
-                override fun onProgress(message: String?) {
-                    callback!!.onProgress(message!!)
-                }
-
-                override fun onSuccess(message: String?) {
-                    callback!!.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
-                }
-
-                override fun onFailure(message: String?) {
-                    if (outputFile.exists()) {
-                        outputFile.delete()
+            FFmpegNew.executeAsync(cmd,object : ExecuteCallback {
+                override fun apply(executionId: Long, returnCode: Int) {
+                    if (returnCode == 0) {
+                        callback!!.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
+                    } else {
+                        if (outputFile.exists()) {
+                            outputFile.delete()
+                        }
+                        callback!!.onFailure(IOException("FFmpeg failure"))
                     }
-                    callback!!.onFailure(IOException(message))
-                }
-
-                override fun onFinish() {
-                    callback!!.onFinish()
                 }
             })
+//            FFmpeg.getInstance(context).execute(cmd, object : ExecuteBinaryResponseHandler() {
+//                override fun onStart() {
+//
+//                }
+//
+//                override fun onProgress(message: String?) {
+//                    callback!!.onProgress(message!!)
+//                }
+//
+//                override fun onSuccess(message: String?) {
+//                    callback!!.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
+//                }
+//
+//                override fun onFailure(message: String?) {
+//                    if (outputFile.exists()) {
+//                        outputFile.delete()
+//                    }
+//                    callback!!.onFailure(IOException(message))
+//                }
+//
+//                override fun onFinish() {
+//                    callback!!.onFinish()
+//                }
+//            })
         } catch (e: Exception) {
             callback!!.onFailure(e)
         } catch (e2: FFmpegCommandAlreadyRunningException) {

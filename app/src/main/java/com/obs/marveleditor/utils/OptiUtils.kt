@@ -138,13 +138,24 @@ object OptiUtils {
     }
 
     fun createVideoFile(context: Context): File {
-        val timeStamp: String =
-            SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
-        val imageFileName: String = OptiConstant.APP_NAME + timeStamp + "_"
-        val storageDir: File = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)!!
-        if (!storageDir.exists()) storageDir.mkdirs()
-        return File.createTempFile(imageFileName, OptiConstant.VIDEO_FORMAT, storageDir)
+        // Tạo một timestamp để đảm bảo tên file là duy nhất
+        val timeStamp: String = SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
+        val videoFileName: String = OptiConstant.APP_NAME + timeStamp + "_"
+
+        // Sử dụng getExternalFilesDir để lưu trữ file trong thư mục ứng dụng
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+
+        // Đảm bảo thư mục tồn tại
+        if (storageDir != null && !storageDir.exists()) {
+            storageDir.mkdirs()
+        }
+
+        // Tạo file tạm thời với tên và định dạng đã chỉ định
+        return File.createTempFile(videoFileName, OptiConstant.VIDEO_FORMAT, storageDir)
     }
+
+
+
 
     fun createAudioFile(context: Context): File {
         val timeStamp: String =

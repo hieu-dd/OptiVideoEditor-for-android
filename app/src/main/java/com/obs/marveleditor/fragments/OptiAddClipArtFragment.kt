@@ -68,8 +68,8 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
         rvPosition = rootView.findViewById(R.id.rvPosition)
         ivClose = rootView.findViewById(R.id.iv_close)
         ivDone = rootView.findViewById(R.id.iv_done)
-        linearLayoutManagerOne = LinearLayoutManager(activity!!.applicationContext)
-        linearLayoutManagerTwo = LinearLayoutManager(activity!!.applicationContext)
+        linearLayoutManagerOne = LinearLayoutManager(requireActivity().applicationContext)
+        linearLayoutManagerTwo = LinearLayoutManager(requireActivity().applicationContext)
 
         linearLayoutManagerOne.orientation = LinearLayoutManager.HORIZONTAL
         rvClipArt.layoutManager = linearLayoutManagerOne
@@ -93,7 +93,7 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
         }
 
         optiClipArtAdapter =
-            OptiClipArtAdapter(clipArtFilePath, activity!!.applicationContext, this)
+            OptiClipArtAdapter(clipArtFilePath, requireActivity().applicationContext, this)
         rvClipArt.adapter = optiClipArtAdapter
         optiClipArtAdapter.notifyDataSetChanged()
 
@@ -103,7 +103,7 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
         positionList.add(OptiConstant.TOP_LEFT)
         positionList.add(OptiConstant.TOP_RIGHT)
 
-        optiPositionAdapter = OptiPositionAdapter(positionList, activity!!.applicationContext, this)
+        optiPositionAdapter = OptiPositionAdapter(positionList, requireActivity().applicationContext, this)
         rvPosition.adapter = optiPositionAdapter
         optiPositionAdapter.notifyDataSetChanged()
 
@@ -142,22 +142,22 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
                     }
                 } else {
                     OptiUtils.showGlideToast(
-                        activity!!,
+                        requireActivity(),
                         getString(R.string.error_select_sticker_pos)
                     )
                 }
             } else {
-                OptiUtils.showGlideToast(activity!!, getString(R.string.error_select_sticker))
+                OptiUtils.showGlideToast(requireActivity(), getString(R.string.error_select_sticker))
             }
         }
     }
 
     private fun addClipArtAction(imgPath: String, position: String) {
         //output file is generated and it is send to video processing
-        val outputFile = OptiUtils.createVideoFile(context!!)
+        val outputFile = OptiUtils.createVideoFile(requireContext())
         Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-        OptiVideoEditor.with(context!!)
+        OptiVideoEditor.with(requireContext())
             .setType(OptiConstant.VIDEO_CLIP_ART_OVERLAY)
             .setFile(videoFile!!)
             .setOutputPath(outputFile.path)

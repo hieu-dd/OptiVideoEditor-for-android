@@ -37,6 +37,7 @@
     <com.github.guilhe.views.SeekBarRangedView
             android:id="@+id/sbrvVideoTrim"
             android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginHorizontal="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             custom:backgroundColor="@color/line_color"

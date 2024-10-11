@@ -189,7 +189,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                 .setMessage(getString(R.string.save_video))
                 .setPositiveButton(getString(R.string.Continue)) { dialog, which ->
                     if (masterVideoFile != null) {
-                        val outputFile = createSaveVideoFile()
+                        val outputFile = createSaveVideoFile(requireContext())
                         OptiCommonMethods.copyFile(masterVideoFile, outputFile)
                         Toast.makeText(context, R.string.successfully_saved, Toast.LENGTH_SHORT)
                             .show()
@@ -899,19 +899,17 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         startActivityForResult(intent, 300)
     }
 
-    private fun createSaveVideoFile(): File {
-        val timeStamp: String =
-            SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
-        val imageFileName: String = OptiConstant.APP_NAME + timeStamp + "_"
+    private fun createSaveVideoFile(context: Context): File {
+        val timeStamp: String = SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
+        val videoFileName = OptiConstant.APP_NAME + timeStamp + "_"
 
-        val path =
-            Environment.getExternalStorageDirectory()
-                .toString() + File.separator + OptiConstant.APP_NAME + File.separator + OptiConstant.MY_VIDEOS + File.separator
-        val folder = File(path)
-        if (!folder.exists())
-            folder.mkdirs()
+        // Sử dụng thư mục ứng dụng để lưu trữ video
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)
+        if (storageDir != null && !storageDir.exists()) {
+            storageDir.mkdirs()
+        }
 
-        return File.createTempFile(imageFileName, OptiConstant.VIDEO_FORMAT, folder)
+        return File.createTempFile(videoFileName, OptiConstant.VIDEO_FORMAT, storageDir)
     }
 
     private fun showBottomSheetDialogFragment(bottomSheetDialogFragment: BottomSheetDialogFragment) {

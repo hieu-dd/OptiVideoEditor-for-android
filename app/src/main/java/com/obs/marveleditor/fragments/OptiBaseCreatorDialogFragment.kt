@@ -18,6 +18,7 @@ import android.provider.Settings
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.obs.marveleditor.R
@@ -82,13 +83,8 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                permissionsRequired[0]
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(permissionsRequired, 130)
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 130)
         }
     }
 
