@@ -10,16 +10,13 @@ package com.obs.marveleditor
 import android.content.Context
 import android.util.Log
 import com.arthenica.mobileffmpeg.Config
-import com.arthenica.mobileffmpeg.ExecuteCallback
-import com.arthenica.mobileffmpeg.FFmpeg as FFmpegNew
-import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiOutputType
 import java.io.File
 import java.io.IOException
+import com.arthenica.mobileffmpeg.FFmpeg as FFmpegNew
 
 class OptiVideoEditor private constructor(private val context: Context) {
 
@@ -369,8 +366,7 @@ class OptiVideoEditor private constructor(private val context: Context) {
         }
 
         try {
-            FFmpegNew.executeAsync(cmd
-            ) { executionId, returnCode ->
+            FFmpegNew.executeAsync(cmd) { executionId, returnCode ->
                 when (returnCode) {
                     Config.RETURN_CODE_SUCCESS -> {
                         // Xử lý khi thành công
