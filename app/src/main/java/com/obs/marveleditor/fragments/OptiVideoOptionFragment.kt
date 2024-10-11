@@ -54,16 +54,16 @@ class OptiVideoOptionFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHel
         tvCamera = inflate?.findViewById(R.id.tvCamera)
 
         acivClose?.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
         }
 
         tvGallery?.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
             helper?.openGallery()
         }
 
         tvCamera?.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
             helper?.openCamera()
         }
     }

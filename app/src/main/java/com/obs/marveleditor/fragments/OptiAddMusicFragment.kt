@@ -103,7 +103,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         mContext = context
 
         acivClose?.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
             helper?.onDidNothing()
         }
 
@@ -143,7 +143,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 
     private fun initializePlayer() {
         // Sử dụng SimpleExoPlayer.Builder để tạo một instance của SimpleExoPlayer
-        exoPlayer = SimpleExoPlayer.Builder(activity!!).build()
+        exoPlayer = SimpleExoPlayer.Builder(requireActivity()).build()
 
         ePlayer?.player = exoPlayer
 
@@ -174,7 +174,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 //                    Toast.makeText(activity, "Please trim audio under $convertedSeekValue.", Toast.LENGTH_SHORT).show()
 //                } else {
                     // Tạo file đầu ra và gửi đến xử lý video
-                    val outputFile = OptiUtils.createAudioFile(context!!)
+                    val outputFile = OptiUtils.createAudioFile(requireContext())
                     Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
                     nextAction = 1
@@ -182,7 +182,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 
 
 
-                    OptiVideoEditor.with(context!!)
+                    OptiVideoEditor.with(requireContext())
                         .setType(OptiConstant.AUDIO_TRIM)
                         .setAudioFile(masterAudioFile!!)
                         .setOutputPath(outputFile.absolutePath)
@@ -301,7 +301,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                         } else {
                             val intent = Intent()
                             intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            val uri = Uri.fromParts("package", context!!.applicationContext.packageName, null)
+                            val uri = Uri.fromParts("package", requireContext().applicationContext.packageName, null)
                             intent.data = uri
                             startActivityForResult(intent, 300)
                         }
@@ -332,7 +332,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
                 val selectedImage = data.data
 
                 val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA)
-                val cursor = context!!.contentResolver.query(selectedImage!!, filePathColumn, null, null, null)
+                val cursor = requireContext().contentResolver.query(selectedImage!!, filePathColumn, null, null, null)
                 if (cursor != null) {
                     cursor.moveToFirst()
                     val columnIndex = cursor.getColumnIndex(filePathColumn[0])
@@ -422,7 +422,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
             muxVideoPlayer()
         } else {
             helper?.showLoading(false)
-            dialog.dismiss()
+            dialog?.dismiss()
         }
     }
 
@@ -432,12 +432,12 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
 
         if (!isRunning()) {
             //output file is generated and send to video processing
-            val outputFile = OptiUtils.createVideoFile(context!!)
+            val outputFile = OptiUtils.createVideoFile(requireContext())
             Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
             nextAction = 2
 
-            OptiVideoEditor.with(context!!)
+            OptiVideoEditor.with(requireContext())
                 .setType(OptiConstant.VIDEO_AUDIO_MERGE)
                 .setFile(videoFile!!)
                 .setAudioFile(audioFile!!)
@@ -451,7 +451,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
         }
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         releasePlayer()
     }

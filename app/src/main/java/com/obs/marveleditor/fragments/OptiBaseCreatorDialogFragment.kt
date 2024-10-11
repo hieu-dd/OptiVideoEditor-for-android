@@ -43,7 +43,7 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
                         //denied
                         Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
                     } else {
-                        if (ActivityCompat.checkSelfPermission(context!!, permissionsRequired[0]) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(requireContext(), permissionsRequired[0]) == PackageManager.PERMISSION_GRANTED) {
                             //SaveImage()
                         } else {
                             callPermissionSettings()
@@ -55,7 +55,7 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         stopRunningProcess()
     }
@@ -63,7 +63,7 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
     private fun callPermissionSettings() {
         val intent = Intent()
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        val uri = Uri.fromParts("package", context!!.applicationContext.packageName, null)
+        val uri = Uri.fromParts("package", requireContext().applicationContext.packageName, null)
         intent.data = uri
         startActivityForResult(intent, 300)
     }
@@ -71,7 +71,7 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
-        if (ActivityCompat.checkSelfPermission(context!!, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(permissionsRequired, 130)
         }
     }
