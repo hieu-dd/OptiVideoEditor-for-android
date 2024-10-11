@@ -9,7 +9,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="com.obs.marveleditor">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA"
+            tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      tools:node="replace"/>
@@ -26,7 +27,8 @@
             android:allowBackup="false">
 
         <!--OptiSplashScreen-->
-        <activity android:name="com.obs.marveleditor.OptiSplashScreen">
+        <activity android:name="com.obs.marveleditor.OptiSplashScreen"
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -2,11 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 33
+    compileSdk 34
+    namespace "com.obs.marveleditor"
     defaultConfig {
         applicationId "com.obs.marveleditor"
         minSdkVersion 24
-        targetSdkVersion 28
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -48,17 +49,13 @@ dependencies {
     implementation "com.github.guilhe:seekbar-ranged-view:3.0.0"
 
     // TextSize
-    implementation "com.intuit.sdp:sdp-android:1.0.6"
+    implementation "com.intuit.sdp:sdp-android:1.1.1"
 
     // GlideToast
     implementation "com.github.imjeevandeshmukh:GlideToast:1.0"
 
     // Fresco
     implementation "com.facebook.fresco:fresco:1.9.0"
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
