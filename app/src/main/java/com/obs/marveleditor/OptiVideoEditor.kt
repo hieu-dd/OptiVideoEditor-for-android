@@ -9,6 +9,7 @@ package com.obs.marveleditor
 
 import android.content.Context
 import android.util.Log
+import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.ExecuteCallback
 import com.arthenica.mobileffmpeg.FFmpeg as FFmpegNew
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler
@@ -368,18 +369,30 @@ class OptiVideoEditor private constructor(private val context: Context) {
         }
 
         try {
-            FFmpegNew.executeAsync(cmd,object : ExecuteCallback {
-                override fun apply(executionId: Long, returnCode: Int) {
-                    if (returnCode == 0) {
-                        callback!!.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
-                    } else {
+            FFmpegNew.executeAsync(cmd
+            ) { executionId, returnCode ->
+                when (returnCode) {
+                    Config.RETURN_CODE_SUCCESS -> {
+                        // Xử lý khi thành công
+                        callback?.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
+                    }
+
+                    Config.RETURN_CODE_CANCEL -> {
+                        // Xử lý khi bị hủy
+                        callback?.onFailure(IOException("Execution cancelled"))
+                    }
+
+                    else -> {
+                        // Xử lý khi thất bại
                         if (outputFile.exists()) {
                             outputFile.delete()
                         }
-                        callback!!.onFailure(IOException("FFmpeg failure"))
+                        callback?.onFailure(IOException("Execution failed with return code $returnCode"))
                     }
                 }
-            })
+                // Kết thúc
+                callback?.onFinish()
+            }
 //            FFmpeg.getInstance(context).execute(cmd, object : ExecuteBinaryResponseHandler() {
 //                override fun onStart() {
 //
