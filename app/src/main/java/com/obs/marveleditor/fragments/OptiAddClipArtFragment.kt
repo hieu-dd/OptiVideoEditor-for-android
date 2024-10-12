@@ -81,8 +81,8 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
         val listFile: Array<File>
 
         val file = File(
-            Environment.getExternalStorageDirectory(),
-            File.separator + OptiConstant.APP_NAME + File.separator + OptiConstant.CLIP_ARTS + File.separator
+            requireContext().getExternalFilesDir(null),
+            "${OptiConstant.APP_NAME}${File.separator}${OptiConstant.CLIP_ARTS}${File.separator}"
         )
 
         if (file.isDirectory) {
@@ -103,7 +103,8 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
         positionList.add(OptiConstant.TOP_LEFT)
         positionList.add(OptiConstant.TOP_RIGHT)
 
-        optiPositionAdapter = OptiPositionAdapter(positionList, requireActivity().applicationContext, this)
+        optiPositionAdapter =
+            OptiPositionAdapter(positionList, requireActivity().applicationContext, this)
         rvPosition.adapter = optiPositionAdapter
         optiPositionAdapter.notifyDataSetChanged()
 
@@ -147,7 +148,10 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
                     )
                 }
             } else {
-                OptiUtils.showGlideToast(requireActivity(), getString(R.string.error_select_sticker))
+                OptiUtils.showGlideToast(
+                    requireActivity(),
+                    getString(R.string.error_select_sticker)
+                )
             }
         }
     }
@@ -196,9 +200,11 @@ class OptiAddClipArtFragment : BottomSheetDialogFragment(), OptiClipArtListener,
     }
 
     override fun onFailure(error: Exception) {
-        Log.v(tagName, "onFailure() ${error.localizedMessage}")
-        Toast.makeText(mContext, "Video processing failed", Toast.LENGTH_LONG).show()
-        helper?.showLoading(false)
+        activity?.runOnUiThread {
+            Log.v(tagName, "onFailure() ${error.localizedMessage}")
+            Toast.makeText(mContext, "Video processing failed", Toast.LENGTH_LONG).show()
+            helper?.showLoading(false)
+        }
     }
 
     override fun onNotAvailable(error: Exception) {

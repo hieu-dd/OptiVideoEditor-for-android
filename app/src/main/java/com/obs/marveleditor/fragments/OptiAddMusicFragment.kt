@@ -26,14 +26,15 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.MainThread
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import com.github.guilhe.views.SeekBarRangedView
 import com.github.guilhe.views.addActionListener
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.Util
 import com.obs.marveleditor.OptiVideoEditor
@@ -56,7 +57,7 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     private var audioFile: File? = null
     private var videoFile: File? = null
     private var playWhenReady: Boolean? = false
-    private var exoPlayer: SimpleExoPlayer? = null
+    private var exoPlayer: ExoPlayer? = null
     private var sbrvVideoTrim: SeekBarRangedView? = null
     private var acbCrop: AppCompatButton? = null
     private var actvStartTime: AppCompatTextView? = null
@@ -134,18 +135,20 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     }
 
     private fun releasePlayer() {
-        if (exoPlayer != null) {
-            playbackPosition = exoPlayer?.currentPosition!!
-            currentWindow = exoPlayer?.currentWindowIndex!!
-            playWhenReady = exoPlayer?.playWhenReady
-            exoPlayer?.release()
-            exoPlayer = null
+        requireActivity().runOnUiThread {
+            if (exoPlayer != null) {
+                playbackPosition = exoPlayer?.currentPosition!!
+                currentWindow = exoPlayer?.currentWindowIndex!!
+                playWhenReady = exoPlayer?.playWhenReady
+                exoPlayer?.release()
+                exoPlayer = null
+            }
         }
     }
 
     private fun initializePlayer() {
         // Sử dụng SimpleExoPlayer.Builder để tạo một instance của SimpleExoPlayer
-        exoPlayer = SimpleExoPlayer.Builder(requireActivity()).build()
+        exoPlayer = ExoPlayer.Builder(requireActivity()).build()
 
         ePlayer?.player = exoPlayer
 
@@ -438,15 +441,17 @@ class OptiAddMusicFragment : OptiBaseCreatorDialogFragment(), OptiDialogueHelper
     }
 
     override fun onFinish() {
-        Log.v(tagName, "onFinish()")
-        if (nextAction == 1) {
-            flLoadingView?.visibility = View.GONE
-            acbCrop?.visibility = View.VISIBLE
-            releasePlayer()
-            muxVideoPlayer()
-        } else {
-            helper?.showLoading(false)
-            dialog?.dismiss()
+        MainThread().run {
+            Log.v(tagName, "onFinish()")
+            if (nextAction == 1) {
+                flLoadingView?.visibility = View.GONE
+                acbCrop?.visibility = View.VISIBLE
+                releasePlayer()
+                muxVideoPlayer()
+            } else {
+                helper?.showLoading(false)
+                dialog?.dismiss()
+            }
         }
     }
 

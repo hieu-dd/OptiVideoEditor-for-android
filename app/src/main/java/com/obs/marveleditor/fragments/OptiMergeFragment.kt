@@ -79,10 +79,10 @@ class OptiMergeFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiF
                 dismiss()
 
                 //output file is generated and send to video processing
-                val outputFile = OptiUtils.createVideoFile(context!!)
+                val outputFile = OptiUtils.createVideoFile(requireContext())
                 Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-                OptiVideoEditor.with(context!!)
+                OptiVideoEditor.with(requireContext())
                     .setType(OptiConstant.MERGE_VIDEO)
                     .setFile(videoFileOne!!)
                     .setFileTwo(videoFileTwo!!)
@@ -197,7 +197,7 @@ class OptiMergeFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiF
     private fun callPermissionSettings() {
         val intent = Intent()
         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        val uri = Uri.fromParts("package", context!!.applicationContext.packageName, null)
+        val uri = Uri.fromParts("package", requireContext().applicationContext.packageName, null)
         intent.data = uri
         startActivityForResult(intent, 300)
     }
@@ -229,7 +229,7 @@ class OptiMergeFragment : BottomSheetDialogFragment(), OptiDialogueHelper, OptiF
                 val selectedImage = data.data
                 //  Log.e("selectedImage==>", "" + selectedImage)
                 val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA)
-                val cursor = context!!.contentResolver
+                val cursor = requireContext().contentResolver
                     .query(selectedImage!!, filePathColumn, null, null, null)
                 if (cursor != null) {
                     cursor.moveToFirst()

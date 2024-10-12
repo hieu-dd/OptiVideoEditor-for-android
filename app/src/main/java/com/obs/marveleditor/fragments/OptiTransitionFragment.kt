@@ -92,10 +92,10 @@ class OptiTransitionFragment : BottomSheetDialogFragment(), OptiFilterListener, 
 
     private fun applyTransitionAction() {
         //output file is generated and send to video processing
-        val outputFile = OptiUtils.createVideoFile(context!!)
+        val outputFile = OptiUtils.createVideoFile(requireContext())
         Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-        OptiVideoEditor.with(context!!)
+        OptiVideoEditor.with(requireContext())
             .setType(OptiConstant.VIDEO_TRANSITION)
             .setFile(videoFile!!)
             //.setFilter(command)

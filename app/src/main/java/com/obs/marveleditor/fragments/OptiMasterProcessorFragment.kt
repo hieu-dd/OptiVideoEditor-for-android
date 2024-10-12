@@ -242,30 +242,34 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     }
 
     override fun onFileProcessed(file: File) {
-        tvSave!!.visibility = View.VISIBLE
-        masterVideoFile = file
-        isLargeVideo = false
+        requireActivity().runOnUiThread {
+            tvSave!!.visibility = View.VISIBLE
+            masterVideoFile = file
+            isLargeVideo = false
 
-        val extension = OptiCommonMethods.getFileExtension(masterVideoFile!!.absolutePath)
+            val extension = OptiCommonMethods.getFileExtension(masterVideoFile!!.absolutePath)
 
-        //check video format before playing into exoplayer
-        if (extension == OptiConstant.AVI_FORMAT) {
-            convertAviToMp4() //avi format is not supported in exoplayer
-        } else {
-            playbackPosition = 0
-            currentWindow = 0
-            initializePlayer()
+            //check video format before playing into exoplayer
+            if (extension == OptiConstant.AVI_FORMAT) {
+                convertAviToMp4() //avi format is not supported in exoplayer
+            } else {
+                playbackPosition = 0
+                currentWindow = 0
+                initializePlayer()
+            }
         }
     }
 
     override fun showLoading(isShow: Boolean) {
-        if (isShow) {
-            progressBar.visibility = View.VISIBLE
-            tvVideoProcessing!!.visibility = View.VISIBLE
-            setProgressValue()
-        } else {
-            progressBar.visibility = View.INVISIBLE
-            tvVideoProcessing!!.visibility = View.INVISIBLE
+        requireActivity().runOnUiThread {
+            if (isShow) {
+                progressBar.visibility = View.VISIBLE
+                tvVideoProcessing!!.visibility = View.VISIBLE
+                setProgressValue()
+            } else {
+                progressBar.visibility = View.INVISIBLE
+                tvVideoProcessing!!.visibility = View.INVISIBLE
+            }
         }
     }
 

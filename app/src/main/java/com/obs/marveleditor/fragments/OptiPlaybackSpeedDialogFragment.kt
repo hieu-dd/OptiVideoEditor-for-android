@@ -135,10 +135,10 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
     }
 
     /*private fun processFSVideo(ffMpegCommand: String) {
-        val outputFile = OptiUtils.createVideoFile(context!!)
+        val outputFile = OptiUtils.createVideoFile(requireContext())
         Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-        VideoSpeed.with(context!!)
+        VideoSpeed.with(requireContext())
             .setFile(masterFile!!)
             .setIsHavingAudio(isHavingAudio)
             .setCallback(this@OptiPlaybackSpeedDialogFragment)
@@ -150,10 +150,10 @@ class OptiPlaybackSpeedDialogFragment : BottomSheetDialogFragment(), OptiDialogu
     override fun processVideo(playbackSpeed: String, tempo: String) {
         if (playbackSpeed != "0.0") {
             //output file is generated and send to video processing
-            val outputFile = OptiUtils.createVideoFile(context!!)
+            val outputFile = OptiUtils.createVideoFile(requireContext())
             Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-            OptiVideoEditor.with(context!!)
+            OptiVideoEditor.with(requireContext())
                 .setType(OptiConstant.VIDEO_PLAYBACK_SPEED)
                 .setFile(masterFile!!)
                 .setOutputPath(outputFile.absolutePath)

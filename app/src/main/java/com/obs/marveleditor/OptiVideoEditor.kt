@@ -9,14 +9,17 @@ package com.obs.marveleditor
 
 import android.content.Context
 import android.util.Log
-import com.arthenica.mobileffmpeg.Config
+import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.ReturnCode
+//import com.arthenica.mobileffmpeg.Config
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiOutputType
 import java.io.File
 import java.io.IOException
-import com.arthenica.mobileffmpeg.FFmpeg as FFmpegNew
+
+//import com.arthenica.mobileffmpeg.FFmpeg as FFmpegNew
 
 class OptiVideoEditor private constructor(private val context: Context) {
 
@@ -366,14 +369,14 @@ class OptiVideoEditor private constructor(private val context: Context) {
         }
 
         try {
-            FFmpegNew.executeAsync(cmd) { executionId, returnCode ->
-                when (returnCode) {
-                    Config.RETURN_CODE_SUCCESS -> {
+            FFmpegKit.executeWithArgumentsAsync(cmd) { session ->
+                when (session.returnCode.value) {
+                    ReturnCode.SUCCESS -> {
                         // Xử lý khi thành công
                         callback?.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
                     }
 
-                    Config.RETURN_CODE_CANCEL -> {
+                    ReturnCode.CANCEL -> {
                         // Xử lý khi bị hủy
                         callback?.onFailure(IOException("Execution cancelled"))
                     }
@@ -383,12 +386,35 @@ class OptiVideoEditor private constructor(private val context: Context) {
                         if (outputFile.exists()) {
                             outputFile.delete()
                         }
-                        callback?.onFailure(IOException("Execution failed with return code $returnCode"))
+                        callback?.onFailure(IOException("Execution failed with return code ${session.returnCode.value}"))
                     }
+
                 }
-                // Kết thúc
                 callback?.onFinish()
             }
+//            FFmpegNew.executeAsync(cmd) { executionId, returnCode ->
+//                when (returnCode) {
+//                    Config.RETURN_CODE_SUCCESS -> {
+//                        // Xử lý khi thành công
+//                        callback?.onSuccess(outputFile, OptiOutputType.TYPE_VIDEO)
+//                    }
+//
+//                    Config.RETURN_CODE_CANCEL -> {
+//                        // Xử lý khi bị hủy
+//                        callback?.onFailure(IOException("Execution cancelled"))
+//                    }
+//
+//                    else -> {
+//                        // Xử lý khi thất bại
+//                        if (outputFile.exists()) {
+//                            outputFile.delete()
+//                        }
+//                        callback?.onFailure(IOException("Execution failed with return code $returnCode"))
+//                    }
+//                }
+//                // Kết thúc
+//                callback?.onFinish()
+//            }
 //            FFmpeg.getInstance(context).execute(cmd, object : ExecuteBinaryResponseHandler() {
 //                override fun onStart() {
 //

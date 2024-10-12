@@ -133,10 +133,10 @@ class OptiFilterFragment : BottomSheetDialogFragment(), OptiFilterListener, Opti
 
     private fun applyFilterAction(command: String) {
         //output file is generated and send to video processing
-        val outputFile = OptiUtils.createVideoFile(context!!)
+        val outputFile = OptiUtils.createVideoFile(requireContext())
         Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
 
-        OptiVideoEditor.with(context!!)
+        OptiVideoEditor.with(requireContext())
             .setType(OptiConstant.VIDEO_FLIRT)
             .setFile(videoFile!!)
             .setFilter(command)

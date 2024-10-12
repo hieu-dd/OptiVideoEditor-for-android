@@ -40,45 +40,51 @@ object OptiUtils {
 
     @SuppressLint("SuspiciousIndentation")
     fun copyFileToInternalStorage(resourceId: Int, resourceName: String, context: Context): File {
-        val path = Environment.getExternalStorageDirectory()
-            .toString() + File.separator + OptiConstant.APP_NAME + File.separator + OptiConstant.CLIP_ARTS + File.separator
-        val folder = File(path)
-        if (!folder.exists())
-            folder.mkdirs()
+        val path = File(context.getExternalFilesDir(null), "${OptiConstant.APP_NAME}/${OptiConstant.CLIP_ARTS}/")
+        if (!path.exists()) {
+            path.mkdirs()
+        }
 
-        val dataPath = "$path$resourceName.png"
-        Log.v("OptiUtils", "path: $dataPath")
+        val dataPath = File(path, "$resourceName.png")
+        Log.v("OptiUtils", "path: ${dataPath.absolutePath}")
         try {
-            val inputStream = context.resources.openRawResource(resourceId)
-            inputStream.toFile(dataPath)
+            context.resources.openRawResource(resourceId).use { inputStream ->
+                dataPath.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
         } catch (e: FileNotFoundException) {
+            Log.e("copyFileToInternalStorage Error", e.localizedMessage)
             e.printStackTrace()
         } catch (e: IOException) {
+            Log.e("copyFileToInternalStorage Error", e.localizedMessage)
             e.printStackTrace()
         }
 
-        return File(dataPath)
+        return dataPath
     }
 
     fun copyFontToInternalStorage(resourceId: Int, resourceName: String, context: Context): File {
-        val path = Environment.getExternalStorageDirectory()
-            .toString() + File.separator + OptiConstant.APP_NAME + File.separator + OptiConstant.FONT + File.separator
-        val folder = File(path)
-        if (!folder.exists())
-            folder.mkdirs()
+        val path = File(context.getExternalFilesDir(null), "${OptiConstant.APP_NAME}/${OptiConstant.FONT}/")
+        if (!path.exists()) {
+            path.mkdirs()
+        }
 
-        val dataPath = "$path$resourceName.ttf"
-        Log.v("OptiUtils", "path: $dataPath")
+        val dataPath = File(path, "$resourceName.ttf")
+        Log.v("OptiUtils", "path: ${dataPath.absolutePath}")
         try {
-            val inputStream = context.resources.openRawResource(resourceId)
-            inputStream.toFile(dataPath)
+            context.resources.openRawResource(resourceId).use { inputStream ->
+                dataPath.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        return File(dataPath)
+        return dataPath
     }
 
     private fun InputStream.toFile(path: String) {
