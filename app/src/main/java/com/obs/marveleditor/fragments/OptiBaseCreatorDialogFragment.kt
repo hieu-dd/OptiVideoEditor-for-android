@@ -20,7 +20,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg
+import com.arthenica.ffmpegkit.FFmpegKit
 import com.obs.marveleditor.R
 import java.io.File
 
@@ -83,8 +83,16 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 130)
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                130
+            )
         }
     }
 
@@ -111,11 +119,11 @@ abstract class OptiBaseCreatorDialogFragment : DialogFragment() {
 
 
     fun stopRunningProcess() {
-        FFmpeg.getInstance(activity).killRunningProcesses()
+        FFmpegKit.cancel()
     }
 
     fun isRunning(): Boolean {
-        return FFmpeg.getInstance(activity).isFFmpegCommandRunning
+        return FFmpegKit.listSessions().isNotEmpty()
     }
 
     fun showInProgressToast() {

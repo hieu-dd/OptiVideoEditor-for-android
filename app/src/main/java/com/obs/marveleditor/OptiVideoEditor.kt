@@ -11,8 +11,6 @@ import android.content.Context
 import android.util.Log
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.ReturnCode
-//import com.arthenica.mobileffmpeg.Config
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException
 import com.obs.marveleditor.interfaces.OptiFFMpegCallback
 import com.obs.marveleditor.utils.OptiConstant
 import com.obs.marveleditor.utils.OptiOutputType
@@ -441,8 +439,6 @@ class OptiVideoEditor private constructor(private val context: Context) {
 //            })
         } catch (e: Exception) {
             callback!!.onFailure(e)
-        } catch (e2: FFmpegCommandAlreadyRunningException) {
-            callback!!.onNotAvailable(e2)
         }
     }
 }

@@ -1,10 +1,3 @@
-/*
- *
- *  Created by Optisol on Aug 2019.
- *  Copyright © 2019 Optisol Business Solutions pvt ltd. All rights reserved.
- *
- */
-
 package com.obs.marveleditor.fragments
 
 import android.Manifest
@@ -32,15 +25,13 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg
-import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.Player
@@ -98,6 +89,88 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     private var mContext: Context? = null
     private var tvInfo: TextView? = null
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        permissions.entries.forEach {
+            if (!it.value) {
+                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private val mainVideoTrimLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.let {
+                val startPosition = it.getIntExtra("startPosition", 0)
+                val endPosition = it.getIntExtra("endPosition", 0)
+
+                val startPos = VideoUtils.secToTime(startPosition.toLong())
+                val endPos = VideoUtils.secToTime(endPosition.toLong())
+                Log.v(tagName, "startPos: $startPos, endPos: $endPos")
+
+                val outputFile = OptiUtils.createVideoFile(requireContext())
+                Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
+
+                OptiVideoEditor.with(requireContext())
+                    .setType(OptiConstant.VIDEO_TRIM)
+                    .setFile(masterVideoFile!!)
+                    .setOutputPath(outputFile.path)
+                    .setStartTime(startPos)
+                    .setEndTime(endPos)
+                    .setCallback(this)
+                    .main()
+
+                showLoading(true)
+            }
+        }
+    }
+
+    private val videoGalleryLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.let {
+                setFilePath(result.resultCode, it, OptiConstant.VIDEO_GALLERY)
+            }
+        }
+    }
+
+    private val recordVideoLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let {
+                masterVideoFile = OptiCommonMethods.writeIntoFile(activity, it, videoFile)
+
+                val duration = OptiCommonMethods.convertDurationInMin(
+                    OptiUtils.getVideoDuration(requireContext(), masterVideoFile!!)
+                )
+
+                if (duration < OptiConstant.VIDEO_LIMIT) {
+                    playbackPosition = 0
+                    currentWindow = 0
+                    initializePlayer()
+                } else {
+                    Toast.makeText(
+                        activity,
+                        getString(R.string.error_select_smaller_video),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val uri = Uri.fromFile(masterVideoFile)
+                    val intent = Intent(context, OptiTrimmerActivity::class.java).apply {
+                        putExtra("VideoPath", masterVideoFile!!.absolutePath)
+                        putExtra("VideoDuration", OptiCommonMethods.getMediaDuration(context, uri))
+                    }
+                    mainVideoTrimLauncher.launch(intent)
+                }
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,6 +179,11 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         rootView = inflater.inflate(R.layout.opti_video_processor_fragment, container, false)
         initView(rootView)
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        openGallery()
     }
 
     private fun initView(rootView: View?) {
@@ -149,31 +227,6 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         optiVideoOptionsAdapter.notifyDataSetChanged()
 
         checkStoragePermission(OptiConstant.PERMISSION_STORAGE)
-
-        //load FFmpeg
-        try {
-            FFmpeg.getInstance(activity).loadBinary(object : FFmpegLoadBinaryResponseHandler {
-                override fun onFailure() {
-                    Log.v("FFMpeg", "Failed to load FFMpeg library.")
-                }
-
-                override fun onSuccess() {
-                    Log.v("FFMpeg", "FFMpeg Library loaded!")
-                }
-
-                override fun onStart() {
-                    Log.v("FFMpeg", "FFMpeg Started")
-                }
-
-                override fun onFinish() {
-                    Log.v("FFMpeg", "FFMpeg Stopped")
-                }
-            })
-        } catch (e: FFmpegNotSupportedException) {
-            e.printStackTrace()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
         ibGallery?.setOnClickListener {
             openGallery()
@@ -295,34 +348,9 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         return masterVideoFile
     }
 
-
-    fun checkAllPermission(permission: Array<String>) {
-        val blockedPermission = checkHasPermission(activity, permission)
-        if (blockedPermission != null && blockedPermission.size > 0) {
-            val isBlocked = isPermissionBlocked(activity, blockedPermission)
-            if (isBlocked) {
-                callPermissionSettings()
-            } else {
-                requestPermissions(permission, OptiConstant.RECORD_VIDEO)
-            }
-        } else {
-            val cameraIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-            videoFile = OptiUtils.createVideoFile(requireContext())
-            Log.v(tagName, "videoPath1: " + videoFile!!.absolutePath)
-            videoUri = FileProvider.getUriForFile(
-                requireContext(),
-                "com.obs.marveleditor.provider", videoFile!!
-            )
-            cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 240) //4 minutes
-            cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoFile)
-            startActivityForResult(cameraIntent, OptiConstant.RECORD_VIDEO)
-        }
-    }
-
     private fun checkStoragePermission(permission: Array<String>) {
         val blockedPermission = checkHasPermission(activity, permission)
-        if (blockedPermission != null && blockedPermission.size > 0) {
+        if (blockedPermission.size > 0) {
             val isBlocked = isPermissionBlocked(activity, blockedPermission)
             if (isBlocked) {
                 callPermissionSettings()
@@ -452,7 +480,10 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     private val isMarshmallow: Boolean
         get() = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) or (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1)
 
-    fun checkHasPermission(context: Activity?, permissions: Array<String>?): ArrayList<String> {
+    private fun checkHasPermission(
+        context: Activity?,
+        permissions: Array<String>?
+    ): ArrayList<String> {
         permissionList = ArrayList()
         if (isMarshmallow && context != null && permissions != null) {
             for (permission in permissions) {
@@ -468,7 +499,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         return permissionList
     }
 
-    fun isPermissionBlocked(context: Activity?, permissions: ArrayList<String>?): Boolean {
+    private fun isPermissionBlocked(context: Activity?, permissions: ArrayList<String>?): Boolean {
         if (isMarshmallow && context != null && permissions != null && isFirstTimePermission) {
             for (permission in permissions) {
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(context, permission)) {
@@ -485,13 +516,6 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         if (resultCode == Activity.RESULT_CANCELED) return
 
         when (requestCode) {
-
-            OptiConstant.VIDEO_GALLERY -> {
-                data?.let {
-                    setFilePath(resultCode, it, OptiConstant.VIDEO_GALLERY)
-                }
-            }
-
             OptiConstant.RECORD_VIDEO -> {
                 data?.let {
                     Log.v(tagName, "data: " + data.data)
@@ -524,34 +548,9 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                                 "VideoDuration",
                                 OptiCommonMethods.getMediaDuration(context, uri)
                             )
-                            startActivityForResult(intent, OptiConstant.MAIN_VIDEO_TRIM)
+                            mainVideoTrimLauncher.launch(intent)
                         }
                     }
-                }
-            }
-
-            OptiConstant.MAIN_VIDEO_TRIM -> {
-                if (resultCode == RESULT_OK) {
-                    val startPosition = data!!.getIntExtra("startPosition", 0)
-                    val endPosition = data.getIntExtra("endPosition", 0)
-
-                    val startPos = VideoUtils.secToTime(startPosition.toLong())
-                    val endPos = VideoUtils.secToTime(endPosition.toLong())
-                    Log.v(tagName, "startPos: $startPos, endPos: $endPos")
-
-                    val outputFile = OptiUtils.createVideoFile(requireContext())
-                    Log.v(tagName, "outputFile: ${outputFile.absolutePath}")
-
-                    OptiVideoEditor.with(requireContext())
-                        .setType(OptiConstant.VIDEO_TRIM)
-                        .setFile(masterVideoFile!!)
-                        .setOutputPath(outputFile.path)
-                        .setStartTime(startPos)
-                        .setEndTime(endPos)
-                        .setCallback(this)
-                        .main()
-
-                    showLoading(true)
                 }
             }
         }
@@ -610,7 +609,7 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
                                 "VideoDuration",
                                 OptiCommonMethods.getMediaDuration(context, uri)
                             )
-                            startActivityForResult(intent, OptiConstant.MAIN_VIDEO_TRIM)
+                            mainVideoTrimLauncher.launch(intent)
                         }
                     }
                 }
@@ -748,18 +747,33 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
         releasePlayer()
     }
 
-    fun checkPermission(requestCode: Int, permission: String) {
-        requestPermissions(arrayOf(permission), requestCode)
-    }
-
     override fun openGallery() {
         releasePlayer()
-        checkPermission(OptiConstant.VIDEO_GALLERY, Manifest.permission.READ_EXTERNAL_STORAGE)
+        requestPermissionLauncher.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+        val galleryIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI).apply {
+                type = "video/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("video/*"))
+            }
+        videoGalleryLauncher.launch(galleryIntent)
     }
+
 
     override fun openCamera() {
         releasePlayer()
-        checkAllPermission(OptiConstant.PERMISSION_CAMERA)
+        requestPermissionLauncher.launch(OptiConstant.PERMISSION_CAMERA)
+        val cameraIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
+            videoFile = OptiUtils.createVideoFile(requireContext())
+            videoUri = FileProvider.getUriForFile(
+                requireContext(),
+                "com.obs.marveleditor.provider",
+                videoFile!!
+            )
+            putExtra(MediaStore.EXTRA_DURATION_LIMIT, 240)
+            putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+            putExtra(MediaStore.EXTRA_OUTPUT, videoFile)
+        }
+        recordVideoLauncher.launch(cameraIntent)
     }
 
 
@@ -904,7 +918,8 @@ class OptiMasterProcessorFragment : Fragment(), OptiBaseCreatorDialogFragment.Ca
     }
 
     private fun createSaveVideoFile(context: Context): File {
-        val timeStamp: String = SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
+        val timeStamp: String =
+            SimpleDateFormat(OptiConstant.DATE_FORMAT, Locale.getDefault()).format(Date())
         val videoFileName = OptiConstant.APP_NAME + timeStamp + "_"
 
         // Sử dụng thư mục ứng dụng để lưu trữ video

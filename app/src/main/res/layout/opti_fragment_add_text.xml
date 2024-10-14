@@ -17,10 +17,10 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
             app:srcCompat="@drawable/ic_baseline_close_24px"
-            android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/app_name" />
+            android:contentDescription="@string/app_name"
+            app:tint="@color/white" />
 
     <ImageView
             android:id="@+id/iv_done"
@@ -28,10 +28,10 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
             app:srcCompat="@drawable/ic_baseline_done_24px"
-            android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/app_name" />
+            android:contentDescription="@string/app_name"
+            app:tint="@color/white" />
 
     <EditText
             android:id="@+id/etText"

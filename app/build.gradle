@@ -43,7 +43,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-ui:2.19.1"
 
     // FFmpeg
-    implementation "com.writingminds:FFmpegAndroid:0.3.2"
+    implementation 'com.arthenica:ffmpeg-kit-full-gpl:6.0-2'
     implementation "org.jcodec:jcodec-android:0.1.9"
 
     // Seekbar
@@ -59,7 +59,4 @@ dependencies {
     implementation "com.facebook.fresco:fresco:2.6.0"
 
     implementation 'androidx.multidex:multidex:2.0.1'
-
-    implementation 'com.arthenica:ffmpeg-kit-full-gpl:6.0-2'
-
 }
